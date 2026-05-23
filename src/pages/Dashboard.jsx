@@ -5,6 +5,8 @@ import api from "../services/api";
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
 
+  const [editingId, setEditingId] = useState(null);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -37,34 +39,68 @@ function Dashboard() {
     });
   };
 
-  // Create task
-  const handleCreateTask = async (e) => {
+  // Create / update task
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const token = localStorage.getItem("token");
 
-      await api.post("/tasks", formData, {
+      if (editingId) {
+        // Update
+        await api.put(`/tasks/${editingId}`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        alert("Task updated");
+        setEditingId(null);
+      } else {
+        // Create
+        await api.post("/tasks", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        alert("Task created");
+      }
+
+      await fetchTasks();
+
+      //Reset form
+      setFormData({
+        title: "",
+        description: "",
+      });
+
+      setEditingId(null);
+    } catch (error) {
+      console.log(error);
+
+      alert("Action failed");
+    }
+  };
+
+  //Delete Task
+  const handleDeleteTask = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.delete(`/tasks/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      alert("Task created 🚀");
+      alert("Task deleted");
 
-      // Refresh tasks
-      fetchTasks();
       await fetchTasks();
-
-      // Reset form
-      setFormData({
-        title: "",
-        description: "",
-      });
     } catch (error) {
       console.log(error);
 
-      alert("Failed to create task");
+      alert("Failed to delete task");
     }
   };
 
@@ -79,7 +115,7 @@ function Dashboard() {
       <hr />
 
       {/* Create Task Form */}
-      <form onSubmit={handleCreateTask}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="title"
@@ -101,7 +137,9 @@ function Dashboard() {
         <br />
         <br />
 
-        <button type="submit">Create Task</button>
+        <button type="submit">
+          {editingId ? "Update Task" : "Create Task"}
+        </button>
       </form>
 
       <hr />
@@ -112,6 +150,18 @@ function Dashboard() {
           <h3>{task.title}</h3>
 
           <p>{task.description}</p>
+          <button
+            onClick={() => {
+              setEditingId(task.id);
+
+              setFormData({
+                title: task.title,
+                description: task.description,
+              });
+            }}
+          >
+            Edit
+          </button>
           <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
           <hr />
         </div>
@@ -119,26 +169,5 @@ function Dashboard() {
     </div>
   );
 }
-
-//Delete Task
-const handleDeleteTask = async (id) => {
-  try {
-    const token = localStorage.getItem("token");
-
-    await api.delete(`/tasks/$(id)`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    alert("Task deleted");
-
-    await fetchTasks();
-  } catch (error) {
-    console.log(error);
-
-    alert("Failed to delete task");
-  }
-};
 
 export default Dashboard;
