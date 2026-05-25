@@ -12,6 +12,12 @@ function Dashboard() {
     description: "",
   });
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+
+    window.location.href = "/";
+  };
+
   // Fetch tasks
   const fetchTasks = async () => {
     try {
@@ -110,8 +116,8 @@ function Dashboard() {
 
   return (
     <div>
-      <h1>Dashboard</h1>
-
+      <h1 className="text-3xl font-bold text-blue-500">Dashboard</h1>
+      <button onClick={handleLogout}>Logout</button>
       <hr />
 
       {/* Create Task Form */}
