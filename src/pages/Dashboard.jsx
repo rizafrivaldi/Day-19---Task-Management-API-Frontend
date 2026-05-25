@@ -115,40 +115,36 @@ function Dashboard() {
   }, []);
 
   return (
-    <div>
+    <div className="min-h-screen bg-slate-100 p-8">
       <h1 className="text-3xl font-bold text-blue-500">Dashboard</h1>
-      <button onClick={handleLogout}>Logout</button>
-      <hr />
+
+      <button
+        onClick={handleLogout}
+        className="bg-red-500 text-white px-4 py-2 rounded"
+      >
+        Logout
+      </button>
+
+      </div>
 
       {/* Create Task Form */}
-      <form onSubmit={handleSubmit}>
+      <div className="bg-white p-6 rounded-xl shadow mb-8">
         <input
-          type="text"
-          name="title"
+          className="w-full border p-3 rounded mb-4"
           placeholder="Task title"
-          value={formData.title}
-          onChange={handleChange}
         />
-
-        <br />
-        <br />
 
         <textarea
-          name="description"
-          placeholder="Task description"
-          value={formData.description}
-          onChange={handleChange}
+          className="w-full border p-3 rounded mb-4"
+          placeholder="Description"
         />
 
-        <br />
-        <br />
-
-        <button type="submit">
+        <button className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
           {editingId ? "Update Task" : "Create Task"}
         </button>
-      </form>
 
-      <hr />
+      </div>
 
       {/* Task List */}
       {tasks.map((task) => (
