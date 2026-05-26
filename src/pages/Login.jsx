@@ -5,40 +5,20 @@ import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 
 function Login() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/login", {
+      const res = await api.post("/login", {
         email,
         password,
       });
 
-      // Save token
-      localStorage.setItem("token", response.data.data.token);
-
-      alert("Login successful");
-
-      navigate("/dashboard");
-    } catch (error) {
-      console.log(error);
-
+      window.location.href = "/dashboard";
+    } catch (err) {
       alert("Login failed");
     }
   };
@@ -55,7 +35,7 @@ function Login() {
           className="w-full border p-3 rounded mb-4"
           type="email"
           placeholder="Email"
-          value={formData.email}
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
@@ -66,15 +46,15 @@ function Login() {
           className="w-full border p-3 rounded mb-4"
           type="password"
           placeholder="Password"
-          value={formData.password}
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
         <br />
         <br />
-
-        <button type="submit">Login</button>
-
+        <div className="bg-center text-center">
+          <button type="submit">Login</button>
+        </div>
         <p className="mt-4 text-center">
           Don't have an account?{" "}
           <Link to="/register" className="text-blue-500 hover:underline">

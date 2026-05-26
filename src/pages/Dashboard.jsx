@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-
 import api from "../services/api";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
-
   const [editingId, setEditingId] = useState(null);
 
   const [formData, setFormData] = useState({
@@ -14,7 +12,6 @@ function Dashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-
     window.location.href = "/";
   };
 
@@ -45,6 +42,15 @@ function Dashboard() {
     });
   };
 
+  const handleEdit = (task) => {
+    setEditingId(task.id);
+
+    setFormData({
+      title: task.title,
+      description: task.description,
+    });
+  };
+
   // Create / update task
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,7 +67,6 @@ function Dashboard() {
         });
 
         alert("Task updated");
-        setEditingId(null);
       } else {
         // Create
         await api.post("/tasks", formData, {
@@ -116,58 +121,71 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-100 p-8">
-      <h1 className="text-3xl font-bold text-blue-500">Dashboard</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-blue-500">Dashboard</h1>
 
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 text-white px-4 py-2 rounded"
-      >
-        Logout
-      </button>
-
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white px-4 py-2 rounded"
+        >
+          Logout
+        </button>
       </div>
 
-      {/* Create Task Form */}
-      <div className="bg-white p-6 rounded-xl shadow mb-8">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-xl shadow mb-8"
+      >
         <input
           className="w-full border p-3 rounded mb-4"
+          name="title"
           placeholder="Task title"
+          value={formData.title}
+          onChange={handleChange}
         />
 
         <textarea
           className="w-full border p-3 rounded mb-4"
+          name="description"
           placeholder="Description"
+          value={formData.description}
+          onChange={handleChange}
         />
 
-        <button className="bg-blue-500 text-white px-4 py-2 rounded"
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
         >
           {editingId ? "Update Task" : "Create Task"}
         </button>
-
-      </div>
+      </form>
 
       {/* Task List */}
-      {tasks.map((task) => (
-        <div key={task.id}>
-          <h3>{task.title}</h3>
+      <div className="grid gap-4">
+        {tasks.map((task) => (
+          <div key={task.id} className="bg-white p-5 rounded-xl shadow">
+            <h2 className="text-xl font-semibold">{task.title}</h2>
 
-          <p>{task.description}</p>
-          <button
-            onClick={() => {
-              setEditingId(task.id);
+            <p className="text-gray-600 mt-2">{task.description}</p>
 
-              setFormData({
-                title: task.title,
-                description: task.description,
-              });
-            }}
-          >
-            Edit
-          </button>
-          <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
-          <hr />
-        </div>
-      ))}
+            <div className="mt-4 flex gap-2">
+              <button
+                className="bg-yellow-400 px-4 py-2 rounded"
+                onClick={() => handleEdit(task)}
+              >
+                Edit
+              </button>
+
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded"
+                onClick={() => handleDeleteTask(task.id)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
