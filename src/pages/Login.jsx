@@ -53,7 +53,12 @@ function Login() {
         <br />
         <br />
         <div className="bg-center text-center">
-          <button type="submit">Login</button>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600"
+          >
+            Login
+          </button>
         </div>
         <p className="mt-4 text-center">
           Don't have an account?{" "}
