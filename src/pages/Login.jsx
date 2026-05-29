@@ -12,14 +12,17 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await api.post("/login", {
+      const res = await api.post("/auth/login", {
         email,
         password,
       });
 
       window.location.href = "/dashboard";
     } catch (err) {
-      alert("Login failed");
+      console.log("Login Error:", err);
+      console.log("Response:", err.response);
+
+      alert(err.response?.data?.message || err.message || "Login failed");
     }
   };
 
