@@ -17,12 +17,14 @@ function Login() {
         password,
       });
 
+      localStorage.setItem("token", res.data.token);
+
       window.location.href = "/dashboard";
     } catch (err) {
       console.log("Login Error:", err);
       console.log("Response:", err.response);
 
-      alert(err.response?.data?.message || err.message || "Login failed");
+      alert("Login failed");
     }
   };
 
