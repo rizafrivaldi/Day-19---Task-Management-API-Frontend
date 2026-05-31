@@ -8,6 +8,8 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -17,13 +19,11 @@ function Login() {
         password,
       });
 
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", res.data.data.token);
 
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } catch (err) {
-      console.log("Login Error:", err);
       console.log("Response:", err.response);
-
       alert("Login failed");
     }
   };
