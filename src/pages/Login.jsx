@@ -19,12 +19,14 @@ function Login() {
         password,
       });
 
+      console.log("Login success:", res.data);
+
       localStorage.setItem("token", res.data.data.token);
 
       navigate("/dashboard");
     } catch (err) {
       console.log("Response:", err.response);
-      alert("Login failed");
+      alert(err.response?.data?.message || "Login failed");
     }
   };
 
