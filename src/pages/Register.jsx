@@ -11,6 +11,8 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -23,7 +25,7 @@ function Register() {
       return;
     }
 
-    if (password.Length < 6) {
+    if (password.length < 6) {
       setError("Password minimal 6 karakter");
       return;
     }
