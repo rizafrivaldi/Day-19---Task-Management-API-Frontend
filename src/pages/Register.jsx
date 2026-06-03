@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import api from "../services/api";
 
@@ -38,7 +38,7 @@ function Register() {
     try {
       setLoading(true);
 
-      await api.post("/register", {
+      await api.post("/auth/register", {
         name,
         email,
         password,
@@ -56,7 +56,7 @@ function Register() {
     <div className="min-h-screen flex items-center justify-center bg-slate-100">
       <form
         onSubmit={handleRegister}
-        className="bg-white p-8 rounded-xl shadow-md w-full max.w-md"
+        className="bg-white p-8 rounded-xl shadow-md w-full max-w-md"
       >
         <h1 className="text-3xl font-bold mb-6 text-center">Register</h1>
 
@@ -97,10 +97,12 @@ function Register() {
         />
 
         <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded transition disabled:opacity-50"
-        {loading ? "Registering..." : "Register"}></button>
+          type="submit"
+          disabled={loading}
+          className="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded transition disabled:opacity-50"
+        >
+          {loading ? "Registering..." : "Register"}
+        </button>
 
         <p className="mt-4 text-center">
           Already have an account?{" "}
