@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { useEffect } from "react";
 
 import api from "../services/api";
 
@@ -9,6 +9,13 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,6 +29,7 @@ function Login() {
       console.log("Login success:", res.data);
 
       localStorage.setItem("token", res.data.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.data.user));
 
       navigate("/dashboard");
     } catch (err) {
