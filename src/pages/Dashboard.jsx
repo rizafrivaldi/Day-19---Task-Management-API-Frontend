@@ -119,10 +119,19 @@ function Dashboard() {
     fetchTasks();
   }, []);
 
+  const userData = localStorage.getItem("user");
+
+  const user =
+    userData && userData !== "undefined" ? JSON.parse(userData) : null;
+
   return (
     <div className="min-h-screen bg-slate-100 p-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-blue-500">Dashboard</h1>
+        <div>
+          <h1 className="text-3xl font-bold text-blue-500">Dashboard</h1>
+
+          <p className="text-gray-600">Welcome, {user?.name || user?.email}</p>
+        </div>
 
         <button
           onClick={handleLogout}
