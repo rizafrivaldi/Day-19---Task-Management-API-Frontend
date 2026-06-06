@@ -27,6 +27,7 @@ function Login() {
       });
 
       console.log("Login success:", res.data);
+      console.log("User received:", res.data.data.user);
 
       localStorage.setItem("token", res.data.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.data.user));

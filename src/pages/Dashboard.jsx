@@ -12,6 +12,8 @@ function Dashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
     window.location.href = "/";
   };
 
@@ -123,6 +125,9 @@ function Dashboard() {
 
   const user =
     userData && userData !== "undefined" ? JSON.parse(userData) : null;
+
+  console.log("USER FROM STORAGE:", user);
+  console.log("RAW USER:", localStorage.getItem("user"));
 
   return (
     <div className="min-h-screen bg-slate-100 p-8">
