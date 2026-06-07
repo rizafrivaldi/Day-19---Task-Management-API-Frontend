@@ -174,6 +174,22 @@ function Dashboard() {
         </button>
       </form>
 
+      {/*Create Task  From*/}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded-xl shadow mb-8"
+      >
+        ...
+      </form>
+
+      {/*Empty State*/}
+      {tasks.length === 0 && (
+        <div className="bg-white p-8 rounded-xl shadow text-center">
+          <h3 className="text-xl font-semibold">No task yet</h3>
+          <p className="text-gray-500 mt-2">Create your task above</p>
+        </div>
+      )}
+
       {/* Task List */}
       <div className="grid gap-4">
         {tasks.map((task) => (
