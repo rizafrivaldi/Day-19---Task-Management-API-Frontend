@@ -51,6 +51,7 @@ function Dashboard() {
     setFormData({
       title: task.title,
       description: task.description,
+      status: task.status,
     });
   };
 
@@ -182,7 +183,7 @@ function Dashboard() {
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded"
         >
-          {editingId ? "Update Task" : "Create Task"}
+          {editingId ? "Update" : "Create"}
         </button>
       </form>
 
@@ -206,7 +207,18 @@ function Dashboard() {
       <div className="grid gap-4">
         {tasks.map((task) => (
           <div key={task.id} className="bg-white p-5 rounded-xl shadow">
-            <h2 className="text-xl font-semibold">{task.title}</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold">{task.title}</h2>
+              <span
+                className={`px-3 py-1 rounded-full text-sm ${
+                  task.status === "completed"
+                    ? "bg-green-500 text-white"
+                    : "bg-yellow-500 text-gray-800"
+                }`}
+              >
+                {task.status}
+              </span>
+            </div>
 
             <p className="text-gray-600 mt-2">{task.description}</p>
 
