@@ -8,6 +8,7 @@ function Dashboard() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    status: "pending",
   });
 
   const handleLogout = () => {
@@ -86,6 +87,7 @@ function Dashboard() {
       setFormData({
         title: "",
         description: "",
+        status: "pending",
       });
 
       setEditingId(null);
@@ -165,6 +167,16 @@ function Dashboard() {
           value={formData.description}
           onChange={handleChange}
         />
+
+        <select
+          name="status"
+          value={formData.status}
+          onChange={handleChange}
+          className="w-full border p-3 rounded mb-4"
+        >
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+        </select>
 
         <button
           type="submit"
