@@ -132,6 +132,30 @@ function Dashboard() {
   console.log("USER FROM STORAGE:", user);
   console.log("RAW USER:", localStorage.getItem("user"));
 
+  const toggleStatus = async (task) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.put(
+        `tasks/${task.id}`,
+        {
+          title: task.title,
+          desciption: task.description,
+          status: task.status === "pending" ? "completed" : "pending",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      fetchTasks();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 p-8">
       <div className="flex justify-between items-center mb-8">
@@ -207,17 +231,22 @@ function Dashboard() {
       <div className="grid gap-4">
         {tasks.map((task) => (
           <div key={task.id} className="bg-white p-5 rounded-xl shadow">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">{task.title}</h2>
-              <span
-                className={`px-3 py-1 rounded-full text-sm ${
-                  task.status === "completed"
-                    ? "bg-green-500 text-white"
-                    : "bg-yellow-500 text-gray-800"
-                }`}
-              >
-                {task.status}
-              </span>
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                checked={task.status === "completed"}
+                onChange={() => toggleStatus(task)}
+                className="w-5 h-5 mt-1"
+              />
+
+              <div className="flex-1">
+                <h2
+                  className={`text-xl font-semibold ${task.status === "completed" ? "line-through text-gray-400" : ""}`}
+                >
+                  {task.title}
+                </h2>
+                <p className="text-gray-600 mt-2">{task.description}</p>
+              </div>
             </div>
 
             <p className="text-gray-600 mt-2">{task.description}</p>
