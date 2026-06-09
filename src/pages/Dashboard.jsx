@@ -248,8 +248,21 @@ function Dashboard() {
                 <p className="text-gray-600 mt-2">{task.description}</p>
               </div>
             </div>
-
-            <p className="text-gray-600 mt-2">{task.description}</p>
+            <div className="mt-3">
+              <span
+                className={`px-3 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+              >
+                {task.status}
+                <p className="text-sm text-gray-500 mt-2">
+                  Created:{" "}
+                  {new Date(task.createdAt).toLocaleString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+              </span>
+            </div>
 
             <div className="mt-4 flex gap-2">
               <button
