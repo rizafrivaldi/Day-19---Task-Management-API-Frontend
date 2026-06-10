@@ -250,18 +250,20 @@ function Dashboard() {
             </div>
             <div className="mt-3">
               <span
-                className={`px-3 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+                className={`px-1 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
               >
                 {task.status}
-                <p className="text-sm text-gray-500 mt-2">
-                  Created:{" "}
-                  {new Date(task.createdAt).toLocaleString("id-ID", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </p>
               </span>
+              <p className="text-sm text-gray-500 mt-2">
+                Created:{" "}
+                {new Date(task.createdAt).toLocaleString("id-ID", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
             </div>
 
             <div className="mt-4 flex gap-2">
