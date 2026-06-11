@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -11,11 +12,13 @@ function Dashboard() {
     status: "pending",
   });
 
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    window.location.href = "/";
+    navigate("/");
   };
 
   // Fetch tasks
@@ -137,10 +140,10 @@ function Dashboard() {
       const token = localStorage.getItem("token");
 
       await api.put(
-        `tasks/${task.id}`,
+        `/tasks/${task.id}`,
         {
           title: task.title,
-          desciption: task.description,
+          description: task.description,
           status: task.status === "pending" ? "completed" : "pending",
         },
         {
@@ -153,6 +156,8 @@ function Dashboard() {
       fetchTasks();
     } catch (error) {
       console.log(error);
+
+      alert("Failed to update status");
     }
   };
 
@@ -211,14 +216,6 @@ function Dashboard() {
         </button>
       </form>
 
-      {/*Create Task  From*/}
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-xl shadow mb-8"
-      >
-        ...
-      </form>
-
       {/*Empty State*/}
       {tasks.length === 0 && (
         <div className="bg-white p-8 rounded-xl shadow text-center">
@@ -235,8 +232,11 @@ function Dashboard() {
               <input
                 type="checkbox"
                 checked={task.status === "completed"}
-                onChange={() => toggleStatus(task)}
-                className="w-5 h-5 mt-1"
+                onChange={(e) => {
+                  e.stopPropagation();
+                  toggleStatus(task);
+                }}
+                className="w-5 h-5 mt-1 cursor-pointer"
               />
 
               <div className="flex-1">
@@ -245,12 +245,13 @@ function Dashboard() {
                 >
                   {task.title}
                 </h2>
+
                 <p className="text-gray-600 mt-2">{task.description}</p>
               </div>
             </div>
             <div className="mt-3">
               <span
-                className={`px-1 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+                className={`px-3 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
               >
                 {task.status}
               </span>
@@ -268,6 +269,7 @@ function Dashboard() {
 
             <div className="mt-4 flex gap-2">
               <button
+                type="button"
                 className="bg-yellow-400 px-4 py-2 rounded"
                 onClick={() => handleEdit(task)}
               >
@@ -275,6 +277,7 @@ function Dashboard() {
               </button>
 
               <button
+                type="button"
                 className="bg-red-500 text-white px-4 py-2 rounded"
                 onClick={() => handleDeleteTask(task.id)}
               >
