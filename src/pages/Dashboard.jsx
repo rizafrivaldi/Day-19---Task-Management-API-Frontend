@@ -136,6 +136,7 @@ function Dashboard() {
   console.log("RAW USER:", localStorage.getItem("user"));
 
   const toggleStatus = async (task) => {
+    console.log("Clicked:", task.id);
     try {
       const token = localStorage.getItem("token");
 
@@ -153,7 +154,7 @@ function Dashboard() {
         },
       );
 
-      fetchTasks();
+      await fetchTasks();
     } catch (error) {
       console.log(error);
 
