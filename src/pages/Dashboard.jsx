@@ -162,6 +162,8 @@ function Dashboard() {
     }
   };
 
+  const [search, setSearch] = useState("");
+
   return (
     <div className="min-h-screen bg-slate-100 p-8">
       <div className="flex justify-between items-center mb-8">
@@ -217,6 +219,46 @@ function Dashboard() {
         </button>
       </form>
 
+      const totalTasks = tasks.length;
+
+      const pendingTasks = tasks.filter(
+        (task) => task.status === "pending"
+        ).length;
+
+      const completedTasks = tasks.filter(
+        (task) => task.status === "completed"
+        ).length;
+
+     <div className="grid md:grid-cols-3 gap-4 mb-8">
+  <div className="bg-white p-5 rounded-xl shadow">
+    <h3 className="text-gray-500">Total Tasks</h3>
+    <p className="text-3xl font-bold">
+      {totalTasks}
+    </p>
+  </div>
+
+  <div className="bg-white p-5 rounded-xl shadow">
+    <h3 className="text-yellow-600">
+      Pending
+    </h3>
+
+    <p className="text-3xl font-bold">
+      {pendingTasks}
+    </p>
+  </div>
+
+  <div className="bg-white p-5 rounded-xl shadow">
+    <h3 className="text-green-600">
+      Completed
+    </h3>
+
+    <p className="text-3xl font-bold">
+      {completedTasks}
+    </p>
+  </div>
+</div> 
+
+
       {/*Empty State*/}
       {tasks.length === 0 && (
         <div className="bg-white p-8 rounded-xl shadow text-center">
@@ -224,6 +266,14 @@ function Dashboard() {
           <p className="text-gray-500 mt-2">Create your task above</p>
         </div>
       )}
+
+      <input
+        type="text"
+        placeholder="Search tasks..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full border p-3 rounded mb-4"
+      />
 
       {/* Task List */}
       <div className="grid gap-4">
