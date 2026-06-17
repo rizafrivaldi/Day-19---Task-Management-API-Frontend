@@ -163,6 +163,7 @@ function Dashboard() {
   };
 
   const [search, setSearch] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
 
   const totalTasks = tasks.length;
 
@@ -183,7 +184,7 @@ function Dashboard() {
 
         <button
           onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded"
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
         >
           Logout
         </button>
@@ -221,7 +222,7 @@ function Dashboard() {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
         >
           {editingId ? "Update" : "Create"}
         </button>
@@ -255,6 +256,7 @@ function Dashboard() {
         </div>
       )}
 
+      <br />
       {/* Search Input */}
       <input
         type="text"
@@ -264,68 +266,85 @@ function Dashboard() {
         className="w-full bg-white p-3 rounded mb-4"
       />
 
+      <select
+        value={filterStatus}
+        onChange={(e) => setFilterStatus(e.target.value)}
+        className="w-full bg-white p-3 rounded mb-4"
+      >
+        <option value="all">All Tasks</option>
+        <option value="pending">Pending</option>
+        <option value="completed">Completed</option>
+      </select>
+
       {/* Task List */}
       <div className="grid gap-4">
-        {tasks.map((task) => (
-          <div key={task.id} className="bg-white p-5 rounded-xl shadow">
-            <div className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                checked={task.status === "completed"}
-                onChange={(e) => {
-                  e.stopPropagation();
-                  toggleStatus(task);
-                }}
-                className="w-5 h-5 mt-1 cursor-pointer"
-              />
+        {tasks
+          .filter((task) =>
+            task.title.toLowerCase().includes(search.toLowerCase()),
+          )
+          .filter((task) =>
+            filterStatus === "all" ? true : task.status === filterStatus,
+          )
+          .map((task) => (
+            <div key={task.id} className="bg-white p-5 rounded-xl shadow">
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  checked={task.status === "completed"}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    toggleStatus(task);
+                  }}
+                  className="w-5 h-5 mt-1 cursor-pointer"
+                />
 
-              <div className="flex-1">
-                <h2
-                  className={`text-xl font-semibold ${task.status === "completed" ? "line-through text-gray-400" : ""}`}
+                <div className="flex-1">
+                  <h2
+                    className={`text-xl font-semibold ${task.status === "completed" ? "line-through text-gray-400" : ""}`}
+                  >
+                    {task.title}
+                  </h2>
+
+                  <p className="text-gray-600 mt-2">{task.description}</p>
+                </div>
+              </div>
+              <div className="mt-3">
+                <span
+                  className={`px-3 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
                 >
-                  {task.title}
-                </h2>
+                  {task.status}
+                </span>
+                <p className="text-sm text-gray-500 mt-2">
+                  Created:{" "}
+                  {new Date(task.createdAt).toLocaleString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              </div>
 
-                <p className="text-gray-600 mt-2">{task.description}</p>
+              <div className="mt-4 flex gap-2">
+                <button
+                  type="button"
+                  className="bg-gray-100 hover:bg-yellow-300 px-4 py-2 rounded"
+                  onClick={() => handleEdit(task)}
+                >
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  className="bg-gray-100 hover:bg-red-400 px-4 py-2 rounded"
+                  onClick={() => handleDeleteTask(task.id)}
+                >
+                  Delete
+                </button>
               </div>
             </div>
-            <div className="mt-3">
-              <span
-                className={`px-3 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
-              >
-                {task.status}
-              </span>
-              <p className="text-sm text-gray-500 mt-2">
-                Created:{" "}
-                {new Date(task.createdAt).toLocaleString("id-ID", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
-            </div>
-
-            <div className="mt-4 flex gap-2">
-              <button
-                type="button"
-                className="bg-yellow-400 px-4 py-2 rounded"
-                onClick={() => handleEdit(task)}
-              >
-                Edit
-              </button>
-
-              <button
-                type="button"
-                className="bg-red-500 text-white px-4 py-2 rounded"
-                onClick={() => handleDeleteTask(task.id)}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
