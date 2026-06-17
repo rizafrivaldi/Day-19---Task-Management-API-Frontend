@@ -164,6 +164,14 @@ function Dashboard() {
 
   const [search, setSearch] = useState("");
 
+  const totalTasks = tasks.length;
+
+  const pendingTasks = tasks.filter((task) => task.status === "pending").length;
+
+  const completedTasks = tasks.filter(
+    (task) => task.status === "completed",
+  ).length;
+
   return (
     <div className="min-h-screen bg-slate-100 p-8">
       <div className="flex justify-between items-center mb-8">
@@ -186,7 +194,7 @@ function Dashboard() {
         className="bg-white p-6 rounded-xl shadow mb-8"
       >
         <input
-          className="w-full border p-3 rounded mb-4"
+          className="w-full bg-gray-100 p-3 rounded mb-4"
           name="title"
           placeholder="Task title"
           value={formData.title}
@@ -194,7 +202,7 @@ function Dashboard() {
         />
 
         <textarea
-          className="w-full border p-3 rounded mb-4"
+          className="w-full bg-gray-100 p-3 rounded mb-4"
           name="description"
           placeholder="Description"
           value={formData.description}
@@ -205,7 +213,7 @@ function Dashboard() {
           name="status"
           value={formData.status}
           onChange={handleChange}
-          className="w-full border p-3 rounded mb-4"
+          className="w-full bg-gray-100 p-3 rounded mb-4"
         >
           <option value="pending">Pending</option>
           <option value="completed">Completed</option>
@@ -219,45 +227,25 @@ function Dashboard() {
         </button>
       </form>
 
-      const totalTasks = tasks.length;
+      {/* Stats */}
+      <div className="grid md:grid-cols-3 gap-4 mb-8">
+        <div className="bg-white p-5 rounded-xl shadow">
+          <h3 className="text-gray-500">Total Tasks</h3>
+          <p className="text-3xl font-bold">{totalTasks}</p>
+        </div>
 
-      const pendingTasks = tasks.filter(
-        (task) => task.status === "pending"
-        ).length;
+        <div className="bg-white p-5 rounded-xl shadow">
+          <h3 className="text-yellow-600">Pending</h3>
 
-      const completedTasks = tasks.filter(
-        (task) => task.status === "completed"
-        ).length;
+          <p className="text-3xl font-bold">{pendingTasks}</p>
+        </div>
 
-     <div className="grid md:grid-cols-3 gap-4 mb-8">
-  <div className="bg-white p-5 rounded-xl shadow">
-    <h3 className="text-gray-500">Total Tasks</h3>
-    <p className="text-3xl font-bold">
-      {totalTasks}
-    </p>
-  </div>
+        <div className="bg-white p-5 rounded-xl shadow">
+          <h3 className="text-green-600">Completed</h3>
 
-  <div className="bg-white p-5 rounded-xl shadow">
-    <h3 className="text-yellow-600">
-      Pending
-    </h3>
-
-    <p className="text-3xl font-bold">
-      {pendingTasks}
-    </p>
-  </div>
-
-  <div className="bg-white p-5 rounded-xl shadow">
-    <h3 className="text-green-600">
-      Completed
-    </h3>
-
-    <p className="text-3xl font-bold">
-      {completedTasks}
-    </p>
-  </div>
-</div> 
-
+          <p className="text-3xl font-bold">{completedTasks}</p>
+        </div>
+      </div>
 
       {/*Empty State*/}
       {tasks.length === 0 && (
@@ -267,12 +255,13 @@ function Dashboard() {
         </div>
       )}
 
+      {/* Search Input */}
       <input
         type="text"
         placeholder="Search tasks..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full border p-3 rounded mb-4"
+        className="w-full bg-white p-3 rounded mb-4"
       />
 
       {/* Task List */}
