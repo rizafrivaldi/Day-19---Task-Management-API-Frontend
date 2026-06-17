@@ -226,7 +226,43 @@ function Dashboard() {
         >
           {editingId ? "Update" : "Create"}
         </button>
+
+        {editingId && (
+          <button
+            type="button"
+            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded ml-2"
+            onClick={() => {
+              setEditingId(null);
+              setFormData({
+                title: "",
+                description: "",
+                status: "pending",
+              });
+            }}
+          >
+            Cancel
+          </button>
+        )}
       </form>
+
+      {/* Search Input */}
+      <input
+        type="text"
+        placeholder="Search tasks..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full bg-white p-3 rounded mb-4"
+      />
+
+      <select
+        value={filterStatus}
+        onChange={(e) => setFilterStatus(e.target.value)}
+        className="w-full bg-white p-3 rounded mb-4"
+      >
+        <option value="all">All Tasks</option>
+        <option value="pending">Pending</option>
+        <option value="completed">Completed</option>
+      </select>
 
       {/* Stats */}
       <div className="grid md:grid-cols-3 gap-4 mb-8">
@@ -251,30 +287,10 @@ function Dashboard() {
       {/*Empty State*/}
       {tasks.length === 0 && (
         <div className="bg-white p-8 rounded-xl shadow text-center">
-          <h3 className="text-xl font-semibold">No task yet</h3>
+          <h3 className="text-xl font-semibold">No matching task found</h3>
           <p className="text-gray-500 mt-2">Create your task above</p>
         </div>
       )}
-
-      <br />
-      {/* Search Input */}
-      <input
-        type="text"
-        placeholder="Search tasks..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full bg-white p-3 rounded mb-4"
-      />
-
-      <select
-        value={filterStatus}
-        onChange={(e) => setFilterStatus(e.target.value)}
-        className="w-full bg-white p-3 rounded mb-4"
-      >
-        <option value="all">All Tasks</option>
-        <option value="pending">Pending</option>
-        <option value="completed">Completed</option>
-      </select>
 
       {/* Task List */}
       <div className="grid gap-4">
