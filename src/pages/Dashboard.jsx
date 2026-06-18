@@ -303,17 +303,7 @@ function Dashboard() {
           )
           .map((task) => (
             <div key={task.id} className="bg-white p-5 rounded-xl shadow">
-              <div className="flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  checked={task.status === "completed"}
-                  onChange={(e) => {
-                    e.stopPropagation();
-                    toggleStatus(task);
-                  }}
-                  className="w-5 h-5 mt-1 cursor-pointer"
-                />
-
+              <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <h2
                     className={`text-xl font-semibold ${task.status === "completed" ? "line-through text-gray-400" : ""}`}
@@ -323,7 +313,18 @@ function Dashboard() {
 
                   <p className="text-gray-600 mt-2">{task.description}</p>
                 </div>
+
+                <input
+                  type="checkbox"
+                  checked={task.status === "completed"}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    toggleStatus(task);
+                  }}
+                  className="w-6 h-6 mt-1 cursor-pointer"
+                />
               </div>
+
               <div className="mt-3">
                 <span
                   className={`px-3 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
