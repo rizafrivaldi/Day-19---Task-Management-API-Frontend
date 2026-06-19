@@ -309,13 +309,12 @@ function Dashboard() {
 
       {/* Task List */}
       <div className="grid gap-4">
-        {tasks
-          .filter((task) =>
-            task.title.toLowerCase().includes(search.toLowerCase()),
-          )
-          .filter((task) =>
-            filterStatus === "all" ? true : task.status === filterStatus,
-          )
+        {[...tasks]
+          .sort((a, b) => {
+            if (a.status === "completed" && b.status === "completed") return 1;
+            if (a.status !== "completed" && b.status === "completed") return -1;
+            return 0;
+          })
           .map((task) => (
             <div key={task.id} className="bg-white p-5 rounded-xl shadow">
               <div className="flex justify-between items-start">
