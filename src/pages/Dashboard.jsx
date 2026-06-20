@@ -164,6 +164,11 @@ function Dashboard() {
 
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const filteredTasks = [...tasks].filter(
+    (task) =>
+      task.title.toLowerCase().includes(search.toLowerCase()) &&
+      (filterStatus === "all" ? true : task.status === filterStatus),
+  );
 
   const totalTasks = tasks.length;
 
@@ -310,6 +315,14 @@ function Dashboard() {
       {/* Task List */}
       <div className="grid gap-4">
         {[...tasks]
+          .filter(
+            (task) =>
+              task.title.toLowerCase().includes(search.toLowerCase()) ||
+              task.description.toLowerCase().includes(search.toLowerCase()),
+          )
+          .filter((task) =>
+            filterStatus === "all" ? true : task.status === filterStatus,
+          )
           .sort((a, b) => {
             if (a.status === "completed" && b.status === "completed") return 1;
             if (a.status !== "completed" && b.status === "completed") return -1;
