@@ -315,11 +315,12 @@ function Dashboard() {
       {/* Task List */}
       <div className="grid gap-4">
         {[...tasks]
-          .filter(
-            (task) =>
-              task.title.toLowerCase().includes(search.toLowerCase()) ||
-              task.description.toLowerCase().includes(search.toLowerCase()),
+          .filter((task) =>
+            `${task.title || ""} ${task.description || ""}`
+              .toLowerCase()
+              .includes(search.toLowerCase()),
           )
+
           .filter((task) =>
             filterStatus === "all" ? true : task.status === filterStatus,
           )
