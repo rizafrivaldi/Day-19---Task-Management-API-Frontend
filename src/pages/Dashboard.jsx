@@ -10,6 +10,7 @@ function Dashboard() {
     title: "",
     description: "",
     status: "pending",
+    dueDate: "",
   });
 
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ function Dashboard() {
       title: task.title,
       description: task.description,
       status: task.status,
+      dueDate: task.dueDate ? task.dueDate.split("T")[0] : "",
     });
   };
 
@@ -92,6 +94,7 @@ function Dashboard() {
         title: "",
         description: "",
         status: "pending",
+        dueDate: "",
       });
 
       setEditingId(null);
@@ -181,6 +184,14 @@ function Dashboard() {
   const progress =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
+  const isOverDue = (task) => {
+    return (
+      task.dueDate &&
+      task.status !== "completed" &&
+      new Date(task.dueDate) < new Date()
+    );
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 p-8">
       <div className="flex justify-between items-center mb-8">
@@ -240,6 +251,14 @@ function Dashboard() {
           <option value="completed">Completed</option>
         </select>
 
+        <input
+          type="date"
+          name="dueDate"
+          value={formData.dueDate}
+          onChange={handleChange}
+          className="w-full bg-gray-100 p-3 rounded mb-4"
+        />
+
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
@@ -257,6 +276,7 @@ function Dashboard() {
                 title: "",
                 description: "",
                 status: "pending",
+                dueDate: "",
               });
             }}
           >
@@ -359,17 +379,23 @@ function Dashboard() {
                 >
                   {task.status}
                 </span>
-                <p className="text-sm text-gray-500 mt-2">
-                  Created:{" "}
-                  {new Date(task.createdAt).toLocaleString("id-ID", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
+                {task.dueDate && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    Created:{" "}
+                    {new Date(task.createdAt).toLocaleString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                )}
               </div>
+
+              {isOverDue(task) && (
+                <span className="text-red-600 font-semibold">Overdue</span>
+              )}
 
               <div className="mt-4 flex gap-2">
                 <button
