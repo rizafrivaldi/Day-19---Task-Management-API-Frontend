@@ -185,11 +185,21 @@ function Dashboard() {
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   const isOverDue = (task) => {
+    if (!task.dueDate) return false;
     return (
       task.dueDate &&
       task.status !== "completed" &&
       new Date(task.dueDate) < new Date()
     );
+  };
+
+  const getDaysLeft = (dueDate) => {
+    const today = new Date();
+    const due = new Date(dueDate);
+
+    const timeDiff = due - today;
+
+    return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
   };
 
   return (
@@ -379,6 +389,12 @@ function Dashboard() {
                 >
                   {task.status}
                 </span>
+
+                {isOverDue(task) && (
+                  <span className="ml-2 px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm">
+                    OVERDUE
+                  </span>
+                )}
                 {task.dueDate && (
                   <p className="text-sm text-gray-500 mt-2">
                     Created:{" "}
@@ -389,13 +405,12 @@ function Dashboard() {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
+                    <p className="text-sm text-gray-500 mt-1">
+                      {getDaysLeft(task.dueDate)} days left
+                    </p>
                   </p>
                 )}
               </div>
-
-              {isOverDue(task) && (
-                <span className="text-red-600 font-semibold">Overdue</span>
-              )}
 
               <div className="mt-4 flex gap-2">
                 <button
