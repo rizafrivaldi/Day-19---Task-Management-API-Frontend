@@ -9,7 +9,7 @@ function Dashboard() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    status: "PENDING",
+    status: "Pending",
     dueDate: "",
   });
 
@@ -253,8 +253,8 @@ function Dashboard() {
           onChange={handleChange}
           className="w-full bg-gray-100 p-3 rounded mb-4"
         >
-          <option value="PENDING">PENDING</option>
-          <option value="COMPLETED">COMPLETED</option>
+          <option value="Pending">Pending</option>
+          <option value="Completed">Completed</option>
         </select>
 
         <input
@@ -281,7 +281,7 @@ function Dashboard() {
               setFormData({
                 title: "",
                 description: "",
-                status: "PENDING",
+                status: "Pending",
                 dueDate: "",
               });
             }}
@@ -306,8 +306,8 @@ function Dashboard() {
         className="w-full bg-white p-3 rounded mb-4"
       >
         <option value="all">All Tasks</option>
-        <option value="PENDING">Pending</option>
-        <option value="COMPLETED">Completed</option>
+        <option value="Pending">Pending</option>
+        <option value="Completed">Completed</option>
       </select>
 
       {/* Stats */}
@@ -370,7 +370,7 @@ function Dashboard() {
 
                 <input
                   type="checkbox"
-                  checked={task.status === "COMPLETED"}
+                  checked={task.status === "Completed"}
                   onChange={(e) => {
                     e.stopPropagation();
                     toggleStatus(task);
@@ -381,9 +381,9 @@ function Dashboard() {
 
               <div className="mt-2">
                 <span
-                  className={`px-3 py-1 rounded-full text-sm ${task.status === "COMPLETED" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+                  className={`px-3 py-1 rounded-full text-sm ${task.status === "Completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
                 >
-                  {task.status}
+                  {task.status.toUpperCase()}
                 </span>
 
                 {isOverDue(task) && (
