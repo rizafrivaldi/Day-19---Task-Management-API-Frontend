@@ -9,7 +9,7 @@ function Dashboard() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    status: "pending",
+    status: "PENDING",
     dueDate: "",
   });
 
@@ -93,7 +93,7 @@ function Dashboard() {
       setFormData({
         title: "",
         description: "",
-        status: "pending",
+        status: "PENDING",
         dueDate: "",
       });
 
@@ -148,7 +148,7 @@ function Dashboard() {
         {
           title: task.title,
           description: task.description,
-          status: task.status === "pending" ? "completed" : "pending",
+          status: task.status === "PENDING" ? "COMPLETED" : "PENDING",
         },
         {
           headers: {
@@ -175,10 +175,10 @@ function Dashboard() {
 
   const totalTasks = tasks.length;
 
-  const pendingTasks = tasks.filter((task) => task.status === "pending").length;
+  const pendingTasks = tasks.filter((task) => task.status === "PENDING").length;
 
   const completedTasks = tasks.filter(
-    (task) => task.status === "completed",
+    (task) => task.status === "COMPLETED",
   ).length;
 
   const progress =
@@ -186,11 +186,7 @@ function Dashboard() {
 
   const isOverDue = (task) => {
     if (!task.dueDate) return false;
-    return (
-      task.dueDate &&
-      task.status !== "completed" &&
-      new Date(task.dueDate) < new Date()
-    );
+    return task.status !== "COMPLETED" && new Date(task.dueDate) < new Date();
   };
 
   const getDaysLeft = (dueDate) => {
@@ -257,8 +253,8 @@ function Dashboard() {
           onChange={handleChange}
           className="w-full bg-gray-100 p-3 rounded mb-4"
         >
-          <option value="pending">Pending</option>
-          <option value="completed">Completed</option>
+          <option value="PENDING">PENDING</option>
+          <option value="COMPLETED">COMPLETED</option>
         </select>
 
         <input
@@ -285,7 +281,7 @@ function Dashboard() {
               setFormData({
                 title: "",
                 description: "",
-                status: "pending",
+                status: "PENDING",
                 dueDate: "",
               });
             }}
@@ -310,8 +306,8 @@ function Dashboard() {
         className="w-full bg-white p-3 rounded mb-4"
       >
         <option value="all">All Tasks</option>
-        <option value="pending">Pending</option>
-        <option value="completed">Completed</option>
+        <option value="PENDING">Pending</option>
+        <option value="COMPLETED">Completed</option>
       </select>
 
       {/* Stats */}
@@ -355,8 +351,8 @@ function Dashboard() {
             filterStatus === "all" ? true : task.status === filterStatus,
           )
           .sort((a, b) => {
-            if (a.status === "completed" && b.status === "completed") return 1;
-            if (a.status !== "completed" && b.status === "completed") return -1;
+            if (a.status === "COMPLETED" && b.status === "COMPLETED") return 1;
+            if (a.status !== "COMPLETED" && b.status === "COMPLETED") return -1;
             return 0;
           })
           .map((task) => (
@@ -364,7 +360,7 @@ function Dashboard() {
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <h2
-                    className={`text-xl font-semibold ${task.status === "completed" ? "line-through text-gray-400" : ""}`}
+                    className={`text-xl font-semibold ${task.status === "COMPLETED" ? "line-through text-gray-400" : ""}`}
                   >
                     {task.title}
                   </h2>
@@ -374,7 +370,7 @@ function Dashboard() {
 
                 <input
                   type="checkbox"
-                  checked={task.status === "completed"}
+                  checked={task.status === "COMPLETED"}
                   onChange={(e) => {
                     e.stopPropagation();
                     toggleStatus(task);
@@ -383,9 +379,9 @@ function Dashboard() {
                 />
               </div>
 
-              <div className="mt-3">
+              <div className="mt-2">
                 <span
-                  className={`px-3 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+                  className={`px-3 py-1 rounded-full text-sm ${task.status === "COMPLETED" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
                 >
                   {task.status}
                 </span>
@@ -395,19 +391,19 @@ function Dashboard() {
                     OVERDUE
                   </span>
                 )}
+                <p className="text-sm text-gray-500 mt-2">
+                  Created:{" "}
+                  {new Date(task.createdAt).toLocaleString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
                 {task.dueDate && (
-                  <p className="text-sm text-gray-500 mt-2">
-                    Created:{" "}
-                    {new Date(task.createdAt).toLocaleString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                    <p className="text-sm text-gray-500 mt-1">
-                      {getDaysLeft(task.dueDate)} days left
-                    </p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {getDaysLeft(task.dueDate)} days left
                   </p>
                 )}
               </div>
