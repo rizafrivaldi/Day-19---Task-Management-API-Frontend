@@ -11,6 +11,7 @@ function Dashboard() {
     description: "",
     status: "Pending",
     dueDate: "",
+    priority: "medium",
   });
 
   const navigate = useNavigate();
@@ -96,6 +97,16 @@ function Dashboard() {
         status: "PENDING",
         dueDate: "",
       });
+      <select
+        name="priority"
+        value={formData.priority}
+        onChange={handleChange}
+        className="w-full border p-3 rounded mb-4"
+      >
+        <option value="low">Low Priority</option>
+        <option value="medium">Medium Priority</option>
+        <option value="high">High Priority</option>
+      </select>;
 
       setEditingId(null);
     } catch (error) {
