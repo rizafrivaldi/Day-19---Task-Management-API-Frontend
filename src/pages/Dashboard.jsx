@@ -58,6 +58,7 @@ function Dashboard() {
       description: task.description,
       status: task.status,
       dueDate: task.dueDate ? task.dueDate.split("T")[0] : "",
+      priority: task.priority,
     });
   };
 
@@ -97,6 +98,7 @@ function Dashboard() {
         status: "PENDING",
         dueDate: "",
       });
+
       <select
         name="priority"
         value={formData.priority}
@@ -362,8 +364,19 @@ function Dashboard() {
             filterStatus === "all" ? true : task.status === filterStatus,
           )
           .sort((a, b) => {
-            if (a.status === "COMPLETED" && b.status === "COMPLETED") return 1;
-            if (a.status !== "COMPLETED" && b.status === "COMPLETED") return -1;
+            const priorityOrder = {
+              high: 3,
+              medium: 2,
+              low: 1,
+            };
+
+            if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
+              return priorityOrder[b.priority] - priorityOrder[a.priority];
+            }
+
+            if (a.status === "compeleted" && b.status === "completed") return 1;
+
+            if (a.status !== "completed" && b.status === "completed") return -1;
             return 0;
           })
           .map((task) => (
@@ -371,7 +384,7 @@ function Dashboard() {
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <h2
-                    className={`text-xl font-semibold ${task.status === "COMPLETED" ? "line-through text-gray-400" : ""}`}
+                    className={`text-xl font-semibold ${task.status === "completed" ? "line-through text-gray-400" : ""}`}
                   >
                     {task.title}
                   </h2>
@@ -381,7 +394,7 @@ function Dashboard() {
 
                 <input
                   type="checkbox"
-                  checked={task.status === "Completed"}
+                  checked={task.status === "completed"}
                   onChange={(e) => {
                     e.stopPropagation();
                     toggleStatus(task);
@@ -392,7 +405,7 @@ function Dashboard() {
 
               <div className="mt-2">
                 <span
-                  className={`px-3 py-1 rounded-full text-sm ${task.status === "Completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+                  className={`px-3 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
                 >
                   {task.status.toUpperCase()}
                 </span>
@@ -402,6 +415,17 @@ function Dashboard() {
                     OVERDUE
                   </span>
                 )}
+                <span
+                  className={`ml-2 px-3 py-1 rounded-full text-sm ${
+                    task.priority === "high"
+                      ? "bg-red-100 text-red-700"
+                      : task.priority === "medium"
+                        ? "bg-orange-100 text-orange-700"
+                        : "bg-blue-100 text-blue-700"
+                  }`}
+                >
+                  {task.priority.toUpperCase()}
+                </span>
                 <p className="text-sm text-gray-500 mt-2">
                   Created:{" "}
                   {new Date(task.createdAt).toLocaleString("id-ID", {
