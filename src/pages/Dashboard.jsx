@@ -97,18 +97,8 @@ function Dashboard() {
         description: "",
         status: "PENDING",
         dueDate: "",
+        priority: "medium",
       });
-
-      <select
-        name="priority"
-        value={formData.priority}
-        onChange={handleChange}
-        className="w-full border p-3 rounded mb-4"
-      >
-        <option value="low">Low Priority</option>
-        <option value="medium">Medium Priority</option>
-        <option value="high">High Priority</option>
-      </select>;
 
       setEditingId(null);
     } catch (error) {
@@ -239,7 +229,6 @@ function Dashboard() {
           Logout
         </button>
       </div>
-
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-xl shadow mb-8"
@@ -277,6 +266,16 @@ function Dashboard() {
           onChange={handleChange}
           className="w-full bg-gray-100 p-3 rounded mb-4"
         />
+        <select
+          name="priority"
+          value={formData.priority}
+          onChange={handleChange}
+          className="w-full bg-gray-100 p-3 rounded mb-4"
+        >
+          <option value="low">Low Priority</option>
+          <option value="medium">Medium Priority</option>
+          <option value="high">High Priority</option>
+        </select>
 
         <button
           type="submit"
@@ -303,8 +302,7 @@ function Dashboard() {
           </button>
         )}
       </form>
-
-      {/* Search Input */}
+      ;{/* Search Input */}
       <input
         type="text"
         placeholder="Search tasks..."
@@ -312,7 +310,6 @@ function Dashboard() {
         onChange={(e) => setSearch(e.target.value)}
         className="w-full bg-white p-3 rounded mb-4"
       />
-
       <select
         value={filterStatus}
         onChange={(e) => setFilterStatus(e.target.value)}
@@ -322,7 +319,6 @@ function Dashboard() {
         <option value="Pending">Pending</option>
         <option value="Completed">Completed</option>
       </select>
-
       {/* Stats */}
       <div className="grid md:grid-cols-3 gap-4 mb-8">
         <div className="bg-white p-5 rounded-xl shadow">
@@ -342,7 +338,6 @@ function Dashboard() {
           <p className="text-3xl font-bold">{completedTasks}</p>
         </div>
       </div>
-
       {/*Empty State*/}
       {tasks.length === 0 && (
         <div className="bg-white p-8 rounded-xl shadow text-center">
@@ -350,7 +345,6 @@ function Dashboard() {
           <p className="text-gray-500 mt-2">Create your task above</p>
         </div>
       )}
-
       {/* Task List */}
       <div className="grid gap-4">
         {[...tasks]
