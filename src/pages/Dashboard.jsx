@@ -201,6 +201,9 @@ function Dashboard() {
     return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const tasksPerPage = 5;
+
   return (
     <div className="min-h-screen bg-slate-100 p-8">
       <div className="flex justify-between items-center mb-8">
