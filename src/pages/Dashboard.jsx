@@ -6,6 +6,9 @@ function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [editingId, setEditingId] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const tasksPerPage = 5;
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -201,8 +204,41 @@ function Dashboard() {
     return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const tasksPerPage = 5;
+  const filteredTasks = [...tasks]
+    .filter((task) =>
+      `${task.title || ""} ${task.description || ""}`
+        .toLowerCase()
+        .includes(search.toLowerCase()),
+    )
+    .filter((task) =>
+      filterStatus === "all" ? true : task.status === filterStatus,
+    )
+    .sort((a, b) => {
+      const priorityOrder = {
+        high: 3,
+        medium: 2,
+        low: 1,
+      };
+
+      // sorting priority
+      if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
+        return priorityOrder[b.priority] - priorityOrder[a.priority];
+      }
+
+      if (a.status === "completed" && b.status !== "completed") return 1;
+
+      if (a.status !== "completed" && b.status === "completed") return -1;
+
+      return 0;
+    });
+
+  const indexOfLastTask = currentPage * tasksPerPage;
+
+  const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+
+  const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
+
+  const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
 
   return (
     <div className="min-h-screen bg-slate-100 p-8">
@@ -342,7 +378,7 @@ function Dashboard() {
         </div>
       </div>
       {/*Empty State*/}
-      {tasks.length === 0 && (
+      {filteredTasks.length === 0 && (
         <div className="bg-white p-8 rounded-xl shadow text-center">
           <h3 className="text-xl font-semibold">No matching task found</h3>
           <p className="text-gray-500 mt-2">Create your task above</p>
@@ -376,6 +412,7 @@ function Dashboard() {
             if (a.status !== "completed" && b.status === "completed") return -1;
             return 0;
           })
+
           .map((task) => (
             <div key={task.id} className="bg-white p-5 rounded-xl shadow">
               <div className="flex justify-between items-start">
