@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
+import {
+  isOverDue,
+  getDaysLeft,
+  priorityOrder,
+  priorityColor,
+  statusColor,
+} from "../utils/taskUtils";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -171,14 +178,14 @@ function Dashboard() {
     }
   };
 
+  {
+    /* State */
+  }
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
-  const filteredTasks = [...tasks].filter(
-    (task) =>
-      task.title.toLowerCase().includes(search.toLowerCase()) &&
-      (filterStatus === "all" ? true : task.status === filterStatus),
-  );
-
+  {
+    /* Statistic */
+  }
   const totalTasks = tasks.length;
 
   const pendingTasks = tasks.filter((task) => task.status === "PENDING").length;
@@ -190,21 +197,10 @@ function Dashboard() {
   const progress =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
-  const isOverDue = (task) => {
-    if (!task.dueDate) return false;
-    return task.status !== "COMPLETED" && new Date(task.dueDate) < new Date();
-  };
-
-  const getDaysLeft = (dueDate) => {
-    const today = new Date();
-    const due = new Date(dueDate);
-
-    const timeDiff = due - today;
-
-    return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-  };
-
-  const filteredTasks = [...tasks]
+  {
+    /* Search + Filter + Sorting */
+  }
+  const filteredTask = [...tasks]
     .filter((task) =>
       `${task.title || ""} ${task.description || ""}`
         .toLowerCase()
@@ -214,30 +210,19 @@ function Dashboard() {
       filterStatus === "all" ? true : task.status === filterStatus,
     )
     .sort((a, b) => {
-      const priorityOrder = {
-        high: 3,
-        medium: 2,
-        low: 1,
-      };
-
-      // sorting priority
       if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
         return priorityOrder[b.priority] - priorityOrder[a.priority];
       }
 
-      if (a.status === "completed" && b.status !== "completed") return 1;
-
-      if (a.status !== "completed" && b.status === "completed") return -1;
-
+      if (a.status === "completed" && b.status === "completed") return -1;
       return 0;
     });
-
+  {
+    /* Pagination */
+  }
   const indexOfLastTask = currentPage * tasksPerPage;
-
   const indexOfFirstTask = indexOfLastTask - tasksPerPage;
-
   const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
-
   const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
 
   return (
