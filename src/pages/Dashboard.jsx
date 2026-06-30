@@ -424,7 +424,7 @@ function Dashboard() {
 
               <div className="mt-2">
                 <span
-                  className={`px-3 py-1 rounded-full text-sm ${task.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+                  className={`px-3 py-1 rounded-full text-sm ${statusColor[task.status]}`}
                 >
                   {task.status.toUpperCase()}
                 </span>
@@ -436,11 +436,7 @@ function Dashboard() {
                 )}
                 <span
                   className={`ml-2 px-3 py-1 rounded-full text-sm ${
-                    task.priority === "high"
-                      ? "bg-red-100 text-red-700"
-                      : task.priority === "medium"
-                        ? "bg-orange-100 text-orange-700"
-                        : "bg-blue-100 text-blue-700"
+                    priorityColor[task.priority]
                   }`}
                 >
                   {task.priority.toUpperCase()}

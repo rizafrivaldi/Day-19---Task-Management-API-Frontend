@@ -13,18 +13,26 @@ export const getDaysLeft = (dueDate) => {
   return Math.ceil(diff / (1000 * 60 * 24));
 };
 
+{
+  /* Priority Sorting */
+}
 export const priorityOrder = {
   high: 3,
   medium: 2,
   low: 1,
 };
 
+{
+  /* Priority Badge Color */
+}
 export const proirityOrder = {
   high: "bg-red-100 ext-red-700",
   medium: "bg-orange-100 text-orange-700",
   low: "bg-blue-100 text-blue-700",
 };
-
+{
+  /* Status Badge Color */
+}
 export const statusColor = {
   completed: "bg-green-100 text-green-700",
   pending: "bg-yellow-100 text-yellow-700",
