@@ -105,7 +105,7 @@ function Dashboard() {
       setFormData({
         title: "",
         description: "",
-        status: "PENDING",
+        status: "Pending",
         dueDate: "",
         priority: "medium",
       });
@@ -161,7 +161,7 @@ function Dashboard() {
         {
           title: task.title,
           description: task.description,
-          status: task.status === "PENDING" ? "COMPLETED" : "PENDING",
+          status: task.status === "Pending" ? "Completed" : "Pending",
         },
         {
           headers: {
@@ -188,10 +188,10 @@ function Dashboard() {
   }
   const totalTasks = tasks.length;
 
-  const pendingTasks = tasks.filter((task) => task.status === "PENDING").length;
+  const pendingTasks = tasks.filter((task) => task.status === "Pending").length;
 
   const completedTasks = tasks.filter(
-    (task) => task.status === "COMPLETED",
+    (task) => task.status === "Completed",
   ).length;
 
   const progress =
@@ -200,7 +200,7 @@ function Dashboard() {
   {
     /* Search + Filter + Sorting */
   }
-  const filteredTask = [...tasks]
+  const filteredTasks = [...tasks]
     .filter((task) =>
       `${task.title || ""} ${task.description || ""}`
         .toLowerCase()
@@ -222,7 +222,7 @@ function Dashboard() {
   }
   const indexOfLastTask = currentPage * tasksPerPage;
   const indexOfFirstTask = indexOfLastTask - tasksPerPage;
-  const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
+  const currentTasks = currentTasks.map(indexOfFirstTask, indexOfLastTask);
   const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
 
   return (
@@ -392,7 +392,7 @@ function Dashboard() {
               return priorityOrder[b.priority] - priorityOrder[a.priority];
             }
 
-            if (a.status === "compeleted" && b.status === "completed") return 1;
+            if (a.status === "completed" && b.status === "completed") return 1;
 
             if (a.status !== "completed" && b.status === "completed") return -1;
             return 0;
