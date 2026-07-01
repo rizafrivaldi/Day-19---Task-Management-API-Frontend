@@ -25,7 +25,7 @@ export const priorityOrder = {
 {
   /* Priority Badge Color */
 }
-export const proirityColor = {
+export const priorityColor = {
   high: "bg-red-100 text-red-700",
   medium: "bg-orange-100 text-orange-700",
   low: "bg-blue-100 text-blue-700",
