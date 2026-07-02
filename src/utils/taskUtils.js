@@ -1,7 +1,7 @@
 export const isOverDue = (task) => {
   if (!task.dueDate) return false;
 
-  return task.status !== "completed" && new Date(task.dueDate) < new Date();
+  return task.status !== "Completed" && new Date(task.dueDate) < new Date();
 };
 
 export const getDaysLeft = (dueDate) => {

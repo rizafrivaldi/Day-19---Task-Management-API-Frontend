@@ -178,14 +178,11 @@ function Dashboard() {
     }
   };
 
-  {
-    /* State */
-  }
+  /* State */
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
-  {
-    /* Statistic */
-  }
+
+  /* Statistic */
   const totalTasks = tasks.length;
 
   const pendingTasks = tasks.filter((task) => task.status === "Pending").length;
@@ -197,9 +194,7 @@ function Dashboard() {
   const progress =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
-  {
-    /* Search + Filter + Sorting */
-  }
+  /* Search + Filter + Sorting */
   const filteredTasks = [...tasks]
     .filter((task) =>
       `${task.title || ""} ${task.description || ""}`
@@ -209,17 +204,20 @@ function Dashboard() {
     .filter((task) =>
       filterStatus === "all" ? true : task.status === filterStatus,
     )
+
+    /* Sorting Priority */
     .sort((a, b) => {
       if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
         return priorityOrder[b.priority] - priorityOrder[a.priority];
       }
 
-      if (a.status === "completed" && b.status === "completed") return -1;
+      /* Task Completed */
+      if (a.status === "Completed" && b.status !== "Completed") return 1;
+      if (a.status !== "Completed" && b.status === "Completed") return -1;
       return 0;
     });
-  {
-    /* Pagination */
-  }
+
+  /* Pagination */
   const indexOfLastTask = currentPage * tasksPerPage;
   const indexOfFirstTask = indexOfLastTask - tasksPerPage;
   const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
@@ -460,7 +458,6 @@ function Dashboard() {
           </div>
         ))}
       </div>
-
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center gap-2 mt-6">
