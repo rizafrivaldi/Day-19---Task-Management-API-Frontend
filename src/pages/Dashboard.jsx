@@ -7,6 +7,8 @@ import {
   priorityOrder,
   priorityColor,
   statusColor,
+  filterAndSortTasks,
+  paginateTasks,
 } from "../utils/taskUtils";
 
 function Dashboard() {
@@ -194,34 +196,18 @@ function Dashboard() {
   const progress =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
-  /* Search + Filter + Sorting */
-  const filteredTasks = [...tasks]
-    .filter((task) =>
-      `${task.title || ""} ${task.description || ""}`
-        .toLowerCase()
-        .includes(search.toLowerCase()),
-    )
-    .filter((task) =>
-      filterStatus === "all" ? true : task.status === filterStatus,
-    )
+  const filteredTasks = filterAndSortTasks(
+    tasks,
+    search,
+    filterStatus,
+    priorityOrder,
+  );
 
-    /* Sorting Priority */
-    .sort((a, b) => {
-      if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
-        return priorityOrder[b.priority] - priorityOrder[a.priority];
-      }
-
-      /* Task Completed */
-      if (a.status === "Completed" && b.status !== "Completed") return 1;
-      if (a.status !== "Completed" && b.status === "Completed") return -1;
-      return 0;
-    });
-
-  /* Pagination */
-  const indexOfLastTask = currentPage * tasksPerPage;
-  const indexOfFirstTask = indexOfLastTask - tasksPerPage;
-  const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
-  const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
+  const { currentTasks, totalPages } = paginateTasks(
+    filteredTasks,
+    currentPage,
+    tasksPerPage,
+  );
 
   return (
     <div className="min-h-screen bg-slate-100 p-8">
@@ -317,6 +303,7 @@ function Dashboard() {
                 description: "",
                 status: "Pending",
                 dueDate: "",
+                priority: "medium",
               });
             }}
           >
