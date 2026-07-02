@@ -326,7 +326,7 @@ function Dashboard() {
           </button>
         )}
       </form>
-      ;{/* Search Input */}
+      {/* Search Input */}
       <input
         type="text"
         placeholder="Search tasks..."
@@ -460,6 +460,31 @@ function Dashboard() {
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+            className="px-4 py-2 bg-gray-200 hover:bg-blue-500 transition-colors rounded disabled:opacity-50 "
+          >
+            Previous
+          </button>
+
+          <span className="px-4 py-2">
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="px-4 py-2 bg-gray-200 hover:bg-blue-500 transition-colors rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
