@@ -9,7 +9,9 @@ import {
   statusColor,
   filterAndSortTasks,
   paginateTasks,
+  getTaskStats,
 } from "../utils/taskUtils";
+import TaskStats from "../components/TaskStats";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -185,16 +187,8 @@ function Dashboard() {
   const [filterStatus, setFilterStatus] = useState("all");
 
   /* Statistic */
-  const totalTasks = tasks.length;
-
-  const pendingTasks = tasks.filter((task) => task.status === "Pending").length;
-
-  const completedTasks = tasks.filter(
-    (task) => task.status === "Completed",
-  ).length;
-
-  const progress =
-    totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const { totalTasks, pendingTasks, completedTasks, progress } =
+    getTaskStats(tasks);
 
   const filteredTasks = filterAndSortTasks(
     tasks,
@@ -329,25 +323,13 @@ function Dashboard() {
         <option value="Completed">Completed</option>
       </select>
       {/* Stats */}
-      <div className="grid md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white p-5 rounded-xl shadow">
-          <h3 className="text-gray-500">Total Tasks</h3>
-          <p className="text-3xl font-bold">{totalTasks}</p>
-        </div>
-
-        <div className="bg-white p-5 rounded-xl shadow">
-          <h3 className="text-yellow-600">Pending</h3>
-
-          <p className="text-3xl font-bold">{pendingTasks}</p>
-        </div>
-
-        <div className="bg-white p-5 rounded-xl shadow">
-          <h3 className="text-green-600">Completed</h3>
-
-          <p className="text-3xl font-bold">{completedTasks}</p>
-        </div>
-      </div>
-      {/*Empty State*/}
+      <TaskStats
+        totalTasks={totalTasks}
+        pendingTasks={pendingTasks}
+        completedTasks={completedTasks}
+        progress={progress}
+      />
+      {/* Empty State */}
       {filteredTasks.length === 0 && (
         <div className="bg-white p-8 rounded-xl shadow text-center">
           <h3 className="text-xl font-semibold">No matching task found</h3>
