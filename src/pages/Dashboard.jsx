@@ -12,6 +12,7 @@ import {
   getTaskStats,
 } from "../utils/taskUtils";
 import TaskStats from "../components/TaskStats";
+import ProgressBar from "../components/ProgressBar";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -208,20 +209,8 @@ function Dashboard() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-blue-500">Dashboard</h1>
-
           <p className="text-gray-600">Welcome, {user?.name || user?.email}</p>
-          <div className="mt-3">
-            <div className="flex justify-between text-sm mb-1">
-              <span>Progress</span>
-              <span>{progress}%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
-              <div
-                className="bg-green-500 h-3 rounded-full transition-all duration-500"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-          </div>
+          <ProgressBar progress={progress} />
         </div>
 
         <button
@@ -327,7 +316,6 @@ function Dashboard() {
         totalTasks={totalTasks}
         pendingTasks={pendingTasks}
         completedTasks={completedTasks}
-        progress={progress}
       />
       {/* Empty State */}
       {filteredTasks.length === 0 && (
