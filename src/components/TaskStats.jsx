@@ -1,4 +1,4 @@
-function TaskStats({ totalTasks, pendingTasks, completedTasks, progress }) {
+function TaskStats({ totalTasks, pendingTasks, completedTasks }) {
   return (
     <>
       <div className="grid md:grid-cols-3 gap-4 mb-8">
