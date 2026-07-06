@@ -16,6 +16,13 @@ import ProgressBar from "../components/ProgressBar";
 import TaskForm from "../components/TaskForm";
 import TaskCard from "../components/TaskCard";
 import Pagination from "../components/Pagination";
+import {
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+  toggleTaskStatus,
+} from "../services/taskServices";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -100,99 +107,29 @@ function Dashboard() {
       const token = localStorage.getItem("token");
 
       if (editingId) {
-        // Update
-        await api.put(`/tasks/${editingId}`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        await updateTask(token, editingId, formData);
         alert("Task updated");
       } else {
-        // Create
-        await api.post("/tasks", formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        await createTask(token, formData);
         alert("Task created");
       }
 
       await fetchTasks();
-
-      //Reset form
       resetForm();
     } catch (error) {
       console.log(error);
-
       alert("Action failed");
-    }
-  };
-
-  //Delete Task
-  const handleDeleteTask = async (id) => {
-    try {
-      const token = localStorage.getItem("token");
-
-      await api.delete(`/tasks/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      alert("Task deleted");
-
-      await fetchTasks();
-    } catch (error) {
-      console.log(error);
-
-      alert("Failed to delete task");
-    }
-  };
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
-  const userData = localStorage.getItem("user");
-
-  const user =
-    userData && userData !== "undefined" ? JSON.parse(userData) : null;
-
-  console.log("USER FROM STORAGE:", user);
-  console.log("RAW USER:", localStorage.getItem("user"));
-
-  const toggleStatus = async (task) => {
-    console.log("Clicked:", task.id);
-    try {
-      const token = localStorage.getItem("token");
-
-      await api.put(
-        `/tasks/${task.id}`,
-        {
-          title: task.title,
-          description: task.description,
-          status: task.status === "Pending" ? "Completed" : "Pending",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      await fetchTasks();
-    } catch (error) {
-      console.log(error);
-
-      alert("Failed to update status");
     }
   };
 
   /* State */
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+
+  const userData = localStorage.getItem("user");
+
+  const user =
+    userData && userData !== "undefined" ? JSON.parse(userData) : null;
 
   /* Statistic */
   const { totalTasks, pendingTasks, completedTasks, progress } =
