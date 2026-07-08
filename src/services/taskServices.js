@@ -45,7 +45,7 @@ export const deleteTask = async (token, id) => {
 };
 
 // TOGGLE STATUS
-export const toggleTaskStatus = async (token, task) => {
+export const toggleTaskStatus = async (token, id, data) => {
   const response = await api.put(
     `/tasks/${task.id}`,
     {

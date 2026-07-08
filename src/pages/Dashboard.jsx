@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
-import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 import {
-  isOverDue,
-  getDaysLeft,
   priorityOrder,
-  priorityColor,
-  statusColor,
   filterAndSortTasks,
   paginateTasks,
   getTaskStats,
@@ -16,13 +11,7 @@ import ProgressBar from "../components/ProgressBar";
 import TaskForm from "../components/TaskForm";
 import TaskCard from "../components/TaskCard";
 import Pagination from "../components/Pagination";
-import {
-  getTasks,
-  createTask,
-  updateTask,
-  deleteTask,
-  toggleTaskStatus,
-} from "../services/taskServices";
+import useTasks from "../hooks/useTasks";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -49,23 +38,14 @@ function Dashboard() {
   };
 
   // Fetch tasks
-  const fetchTasks = async () => {
-    try {
-      const token = localStorage.getItem("token");
-
-      const response = await api.get("/tasks", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setTasks(response.data.data);
-    } catch (error) {
-      console.log(error);
-
-      alert("Failed to fetch tasks");
-    }
-  };
+  const task {
+    tasks,
+    fetchTasks,
+    addTask,
+    editTask,
+    removeTask,
+    toggleStatus,
+  }=useTasks();
 
   // Handle input
   const handleChange = (e) => {
@@ -119,6 +99,33 @@ function Dashboard() {
     } catch (error) {
       console.log(error);
       alert("Action failed");
+    }
+  };
+
+  const handleDeleteTask = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await deleteTask(token, id);
+
+      alert("Task deleted");
+      await fetchTasks();
+    } catch (error) {
+      console.log(error);
+      alert("Failed to delete task");
+    }
+  };
+
+  const toggleStatus = async (task) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await toggleTaskStatus(token, task.id, task);
+
+      await fetchTasks();
+    } catch (error) {
+      console.log(error);
+      alert("Failed to update status");
     }
   };
 

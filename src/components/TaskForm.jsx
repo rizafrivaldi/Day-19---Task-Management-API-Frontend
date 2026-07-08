@@ -13,7 +13,7 @@ function TaskForm({
       <input
         className="w-full bg-gray-100 p-3 rounded mb-4"
         name="title"
-        placeholder="Task title"
+        placeholder="Task Title"
         value={formData.title}
         onChange={handleChange}
       />
@@ -29,6 +29,7 @@ function TaskForm({
       <select
         name="status"
         value={formData.status}
+        placeholder="Status"
         onChange={handleChange}
         className="w-full bg-gray-100 p-3 rounded mb-4"
       >

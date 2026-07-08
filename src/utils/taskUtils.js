@@ -8,9 +8,11 @@ export const getDaysLeft = (dueDate) => {
   const now = new Date();
   const due = new Date(dueDate);
 
-  const diff = due.getTime() - now.getTime();
+  const msPerDay = 1000 * 60 * 60 * 24;
 
-  return Math.ceil(diff / (1000 * 60 * 24));
+  const diff = due.setHours(0, 0, 0, 0) - now.setHours(0, 0, 0, 0);
+
+  return Math.ceil(diff / msPerDay);
 };
 
 // Priority Sorting
