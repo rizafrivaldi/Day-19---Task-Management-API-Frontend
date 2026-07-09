@@ -14,7 +14,6 @@ import Pagination from "../components/Pagination";
 import useTasks from "../hooks/useTasks";
 
 function Dashboard() {
-  const [tasks, setTasks] = useState([]);
   const [editingId, setEditingId] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,14 +37,8 @@ function Dashboard() {
   };
 
   // Fetch tasks
-  const task {
-    tasks,
-    fetchTasks,
-    addTask,
-    editTask,
-    removeTask,
-    toggleStatus,
-  }=useTasks();
+  const { tasks, fetchTasks, addTask, editTask, removeTask, toggleStatus } =
+    useTasks();
 
   // Handle input
   const handleChange = (e) => {
@@ -87,10 +80,10 @@ function Dashboard() {
       const token = localStorage.getItem("token");
 
       if (editingId) {
-        await updateTask(token, editingId, formData);
+        await editTask(editingId, formData);
         alert("Task updated");
       } else {
-        await createTask(token, formData);
+        await addTask(formData);
         alert("Task created");
       }
 
@@ -106,26 +99,12 @@ function Dashboard() {
     try {
       const token = localStorage.getItem("token");
 
-      await deleteTask(token, id);
+      await removeTask(id);
 
       alert("Task deleted");
-      await fetchTasks();
     } catch (error) {
       console.log(error);
       alert("Failed to delete task");
-    }
-  };
-
-  const toggleStatus = async (task) => {
-    try {
-      const token = localStorage.getItem("token");
-
-      await toggleTaskStatus(token, task.id, task);
-
-      await fetchTasks();
-    } catch (error) {
-      console.log(error);
-      alert("Failed to update status");
     }
   };
 
@@ -217,13 +196,7 @@ function Dashboard() {
       {/* Task Card */}
       <div className="grid gap-4">
         {currentTasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            handleEdit={handleEdit}
-            handleDeleteTask={handleDeleteTask}
-            toggleStatus={toggleStatus}
-          />
+          <TaskCard key={task.id} task={task} toggleStatus={toggleStatus} />
         ))}
       </div>
       {/* Pagination */}
