@@ -37,8 +37,7 @@ function Dashboard() {
   };
 
   // Fetch tasks
-  const { tasks, fetchTasks, addTask, editTask, removeTask, toggleStatus } =
-    useTasks();
+  const { tasks, addTask, editTask, removeTask, toggleStatus } = useTasks();
 
   // Handle input
   const handleChange = (e) => {
@@ -77,8 +76,6 @@ function Dashboard() {
     e.preventDefault();
 
     try {
-      const token = localStorage.getItem("token");
-
       if (editingId) {
         await editTask(editingId, formData);
         alert("Task updated");
@@ -87,7 +84,6 @@ function Dashboard() {
         alert("Task created");
       }
 
-      await fetchTasks();
       resetForm();
     } catch (error) {
       console.log(error);
@@ -97,8 +93,6 @@ function Dashboard() {
 
   const handleDeleteTask = async (id) => {
     try {
-      const token = localStorage.getItem("token");
-
       await removeTask(id);
 
       alert("Task deleted");
@@ -196,7 +190,13 @@ function Dashboard() {
       {/* Task Card */}
       <div className="grid gap-4">
         {currentTasks.map((task) => (
-          <TaskCard key={task.id} task={task} toggleStatus={toggleStatus} />
+          <TaskCard
+            key={task.id}
+            task={task}
+            handleEdit={handleEdit}
+            handleDeleteTask={handleDeleteTask}
+            toggleStatus={toggleStatus}
+          />
         ))}
       </div>
       {/* Pagination */}
