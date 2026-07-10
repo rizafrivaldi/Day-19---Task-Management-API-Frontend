@@ -51,15 +51,11 @@ export const filterAndSortTasks = (
       filterStatus === "all" ? true : task.status === filterStatus,
     )
     .sort((a, b) => {
-      if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
-        return priorityOrder[b.priority] - priorityOrder[a.priority];
-      }
-
       if (a.status === "Completed" && b.status !== "Completed") return 1;
 
       if (a.status !== "Completed" && b.status === "Completed") return -1;
 
-      return 0;
+      return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
 };
 

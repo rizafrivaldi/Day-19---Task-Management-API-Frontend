@@ -46,19 +46,11 @@ export const deleteTask = async (token, id) => {
 
 // TOGGLE STATUS
 export const toggleTaskStatus = async (token, id, data) => {
-  const response = await api.put(
-    `/tasks/${task.id}`,
-    {
-      title: task.title,
-      description: task.description,
-      status: task.status === "Pending" ? "Completed" : "Pending",
+  const response = await api.put(`/tasks/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    },
-  );
+  });
 
   return response.data;
 };
