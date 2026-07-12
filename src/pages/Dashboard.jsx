@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  priorityOrder,
-  filterAndSortTasks,
-  paginateTasks,
-  getTaskStats,
-} from "../utils/taskUtils";
+import { paginateTasks, getTaskStats } from "../utils/taskUtils";
 import TaskStats from "../components/TaskStats";
-import ProgressBar from "../components/ProgressBar";
 import TaskForm from "../components/TaskForm";
 import TaskCard from "../components/TaskCard";
 import Pagination from "../components/Pagination";
 import useTasks from "../hooks/useTasks";
+import SearchFilter from "../components/SearchFilter";
+import DashboardHeader from "../components/DashboardHeader";
+import EmptyState from "../components/EmptyState";
+import useAuth from "../hooks/useAuth";
+import useTaskFilter from "../hooks/useTaskFilter";
 
 function Dashboard() {
+  const { user, logout } = useAuth();
+
   const [editingId, setEditingId] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,17 +27,10 @@ function Dashboard() {
     priority: "medium",
   });
 
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    navigate("/");
-  };
-
   // Fetch tasks
   const { tasks, addTask, editTask, removeTask, toggleStatus } = useTasks();
+  const { search, setSearch, filterStatus, setFilterStatus, filteredTasks } =
+    useTaskFilter(tasks);
 
   // Handle input
   const handleChange = (e) => {
@@ -102,25 +95,9 @@ function Dashboard() {
     }
   };
 
-  /* State */
-  const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
-
-  const userData = localStorage.getItem("user");
-
-  const user =
-    userData && userData !== "undefined" ? JSON.parse(userData) : null;
-
   /* Statistic */
   const { totalTasks, pendingTasks, completedTasks, progress } =
     getTaskStats(tasks);
-
-  const filteredTasks = filterAndSortTasks(
-    tasks,
-    search,
-    filterStatus,
-    priorityOrder,
-  );
 
   const { currentTasks, totalPages } = paginateTasks(
     filteredTasks,
@@ -134,20 +111,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-100 p-8">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-blue-500">Dashboard</h1>
-          <p className="text-gray-600">Welcome, {user?.name || user?.email}</p>
-          <ProgressBar progress={progress} />
-        </div>
-
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-        >
-          Logout
-        </button>
-      </div>
+      <DashboardHeader user={user} progress={progress} handleLogout={logout} />
 
       <TaskForm
         formData={formData}
@@ -157,23 +121,13 @@ function Dashboard() {
         resetForm={resetForm}
       />
 
-      {/* Search Input */}
-      <input
-        type="text"
-        placeholder="Search tasks..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full bg-white p-3 rounded mb-4"
+      <SearchFilter
+        search={search}
+        setSearch={setSearch}
+        filterStatus={filterStatus}
+        setFilterStatus={setFilterStatus}
       />
-      <select
-        value={filterStatus}
-        onChange={(e) => setFilterStatus(e.target.value)}
-        className="w-full bg-white p-3 rounded mb-4"
-      >
-        <option value="all">All Tasks</option>
-        <option value="Pending">Pending</option>
-        <option value="Completed">Completed</option>
-      </select>
+
       {/* Stats */}
       <TaskStats
         totalTasks={totalTasks}
@@ -181,12 +135,8 @@ function Dashboard() {
         completedTasks={completedTasks}
       />
       {/* Empty State */}
-      {filteredTasks.length === 0 && (
-        <div className="bg-white p-8 rounded-xl shadow text-center">
-          <h3 className="text-xl font-semibold">No matching task found</h3>
-          <p className="text-gray-500 mt-2">Create your task above</p>
-        </div>
-      )}
+      {filteredTasks.length === 0 && <EmptyState />}
+
       {/* Task Card */}
       <div className="grid gap-4">
         {currentTasks.map((task) => (
