@@ -10,79 +10,23 @@ import DashboardHeader from "../components/DashboardHeader";
 import EmptyState from "../components/EmptyState";
 import useAuth from "../hooks/useAuth";
 import useTaskFilter from "../hooks/useTaskFilter";
+import useTaskForm from "../hooks/useTaskForm";
 
 function Dashboard() {
   const { user, logout } = useAuth();
 
-  const [editingId, setEditingId] = useState(null);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const tasksPerPage = 5;
-
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    status: "Pending",
-    dueDate: "",
-    priority: "medium",
-  });
-
-  // Fetch tasks
-  const { tasks, addTask, editTask, removeTask, toggleStatus } = useTasks();
   const { search, setSearch, filterStatus, setFilterStatus, filteredTasks } =
     useTaskFilter(tasks);
 
-  // Handle input
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleEdit = (task) => {
-    setEditingId(task.id);
-
-    setFormData({
-      title: task.title,
-      description: task.description,
-      status: task.status,
-      dueDate: task.dueDate ? task.dueDate.split("T")[0] : "",
-      priority: task.priority,
-    });
-  };
-
-  const resetForm = () => {
-    setEditingId(null);
-
-    setFormData({
-      title: "",
-      description: "",
-      status: "Pending",
-      dueDate: "",
-      priority: "medium",
-    });
-  };
-
-  // Create / update task
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      if (editingId) {
-        await editTask(editingId, formData);
-        alert("Task updated");
-      } else {
-        await addTask(formData);
-        alert("Task created");
-      }
-
-      resetForm();
-    } catch (error) {
-      console.log(error);
-      alert("Action failed");
-    }
-  };
+  const { tasks, addTask, editTask, removeTask, toggleStatus } = useTasks();
+  const {
+    formData,
+    editingId,
+    handleChange,
+    handleSubmit,
+    resetForm,
+    handleEdit,
+  } = useTaskForm({ addTask, editTask });
 
   const handleDeleteTask = async (id) => {
     try {
