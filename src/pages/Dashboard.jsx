@@ -15,10 +15,11 @@ import useTaskForm from "../hooks/useTaskForm";
 function Dashboard() {
   const { user, logout } = useAuth();
 
+  const { tasks, addTask, editTask, removeTask, toggleStatus } = useTasks();
+
   const { search, setSearch, filterStatus, setFilterStatus, filteredTasks } =
     useTaskFilter(tasks);
 
-  const { tasks, addTask, editTask, removeTask, toggleStatus } = useTasks();
   const {
     formData,
     editingId,
@@ -42,6 +43,9 @@ function Dashboard() {
   /* Statistic */
   const { totalTasks, pendingTasks, completedTasks, progress } =
     getTaskStats(tasks);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const tasksPerPage = 5;
 
   const { currentTasks, totalPages } = paginateTasks(
     filteredTasks,
