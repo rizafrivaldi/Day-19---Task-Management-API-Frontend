@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
+
+import useAuth from "../hooks/useAuth";
+import useTasks from "../hooks/useTasks";
+import useTaskForm from "../hooks/useTaskForm";
+import useTaskFilter from "../hooks/useTaskFilter";
+
 import { paginateTasks, getTaskStats } from "../utils/taskUtils";
-import TaskStats from "../components/TaskStats";
+
+import DashboardHeader from "../components/DashboardHeader";
 import TaskForm from "../components/TaskForm";
+import SearchFilter from "../components/SearchFilter";
+import TaskStats from "../components/TaskStats";
 import TaskCard from "../components/TaskCard";
 import Pagination from "../components/Pagination";
-import useTasks from "../hooks/useTasks";
-import SearchFilter from "../components/SearchFilter";
-import DashboardHeader from "../components/DashboardHeader";
+
 import EmptyState from "../components/EmptyState";
-import useAuth from "../hooks/useAuth";
-import useTaskFilter from "../hooks/useTaskFilter";
-import useTaskForm from "../hooks/useTaskForm";
 
 function Dashboard() {
   const { user, logout } = useAuth();
 
   const { tasks, addTask, editTask, removeTask, toggleStatus } = useTasks();
-
-  const { search, setSearch, filterStatus, setFilterStatus, filteredTasks } =
-    useTaskFilter(tasks);
 
   const {
     formData,
@@ -28,6 +29,26 @@ function Dashboard() {
     resetForm,
     handleEdit,
   } = useTaskForm({ addTask, editTask });
+
+  const { search, setSearch, filterStatus, setFilterStatus, filteredTasks } =
+    useTaskFilter(tasks);
+
+  /* Statistic */
+  const [currentPage, setCurrentPage] = useState(1);
+  const tasksPerPage = 5;
+
+  const { totalTasks, pendingTasks, completedTasks, progress } =
+    getTaskStats(tasks);
+
+  const { currentTasks, totalPages } = paginateTasks(
+    filteredTasks,
+    currentPage,
+    tasksPerPage,
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, filterStatus]);
 
   const handleDeleteTask = async (id) => {
     try {
@@ -39,23 +60,6 @@ function Dashboard() {
       alert("Failed to delete task");
     }
   };
-
-  /* Statistic */
-  const { totalTasks, pendingTasks, completedTasks, progress } =
-    getTaskStats(tasks);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const tasksPerPage = 5;
-
-  const { currentTasks, totalPages } = paginateTasks(
-    filteredTasks,
-    currentPage,
-    tasksPerPage,
-  );
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search, filterStatus]);
 
   return (
     <div className="min-h-screen bg-slate-100 p-8">
