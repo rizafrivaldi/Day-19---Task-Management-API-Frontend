@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useTaskForm({ addTask, editTask }) {
+export default function useTaskForm({ addTask, editTask, removeTask }) {
   const [editingId, setEditingId] = useState(null);
 
   const [formData, setFormData] = useState({
@@ -62,6 +62,17 @@ export default function useTaskForm({ addTask, editTask }) {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await removeTask(id);
+      alert("Task deleted");
+    } catch (error) {
+      console.log(error);
+
+      alert("Failed to delete task");
+    }
+  };
+
   return {
     formData,
     editingId,
@@ -71,5 +82,6 @@ export default function useTaskForm({ addTask, editTask }) {
     resetForm,
     handleEdit,
     handleSubmit,
+    handleDelete,
   };
 }

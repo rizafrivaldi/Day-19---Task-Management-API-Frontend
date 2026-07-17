@@ -26,9 +26,10 @@ function Dashboard() {
     editingId,
     handleChange,
     handleSubmit,
-    resetForm,
     handleEdit,
-  } = useTaskForm({ addTask, editTask });
+    handleDelete,
+    resetForm,
+  } = useTaskForm({ addTask, editTask, removeTask });
 
   const { search, setSearch, filterStatus, setFilterStatus, filteredTasks } =
     useTaskFilter(tasks);
@@ -49,17 +50,6 @@ function Dashboard() {
   useEffect(() => {
     setCurrentPage(1);
   }, [search, filterStatus]);
-
-  const handleDeleteTask = async (id) => {
-    try {
-      await removeTask(id);
-
-      alert("Task deleted");
-    } catch (error) {
-      console.log(error);
-      alert("Failed to delete task");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-slate-100 p-8">
@@ -96,11 +86,12 @@ function Dashboard() {
             key={task.id}
             task={task}
             handleEdit={handleEdit}
-            handleDeleteTask={handleDeleteTask}
+            handleDelete={handleDelete}
             toggleStatus={toggleStatus}
           />
         ))}
       </div>
+
       {/* Pagination */}
       <Pagination
         currentPage={currentPage}

@@ -5,7 +5,7 @@ import {
   statusColor,
 } from "../utils/taskUtils";
 
-function TaskCard({ task, handleEdit, handleDeleteTask, toggleStatus }) {
+function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
   return (
     <div className="bg-white p-5 rounded-xl shadow">
       <div className="flex justify-between items-start">
@@ -85,7 +85,7 @@ function TaskCard({ task, handleEdit, handleDeleteTask, toggleStatus }) {
         <button
           type="button"
           className="bg-gray-100 hover:bg-red-400 px-4 py-2 rounded"
-          onClick={() => handleDeleteTask(task.id)}
+          onClick={() => handleDelete(task.id)}
         >
           Delete
         </button>
