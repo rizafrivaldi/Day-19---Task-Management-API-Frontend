@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function useTaskForm({ addTask, editTask, removeTask }) {
   const [editingId, setEditingId] = useState(null);
@@ -49,27 +50,26 @@ export default function useTaskForm({ addTask, editTask, removeTask }) {
     try {
       if (editingId) {
         await editTask(editingId, formData);
-        alert("Task updated");
+        toast.success("Task updated");
       } else {
         await addTask(formData);
-        alert("Task created");
+        toast.success("Task created");
       }
 
       resetForm();
     } catch (error) {
       console.log(error);
-      alert("Action failed");
+      toast.error("Action failed");
     }
   };
 
   const handleDelete = async (id) => {
     try {
       await removeTask(id);
-      alert("Task deleted");
+      toast.success("Task deleted");
     } catch (error) {
       console.log(error);
-
-      alert("Failed to delete task");
+      toast.errorg("Failed to delete task");
     }
   };
 
