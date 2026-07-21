@@ -47,19 +47,23 @@ export default function useTaskForm({ addTask, editTask, removeTask }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const toastedId = toast.loading("Saving task...");
+
     try {
       if (editingId) {
         await editTask(editingId, formData);
-        toast.success("Task updated");
+        toast.success("Task updated", { id: toastedId });
       } else {
         await addTask(formData);
-        toast.success("Task created");
+        toast.success("Task created", { id: toastedId });
       }
 
       resetForm();
     } catch (error) {
       console.log(error);
-      toast.error("Action failed");
+      toast.error(error.response?.data?.message ?? "Something went wrong", {
+        id: toastedId,
+      });
     }
   };
 
@@ -69,7 +73,7 @@ export default function useTaskForm({ addTask, editTask, removeTask }) {
       toast.success("Task deleted");
     } catch (error) {
       console.log(error);
-      toast.errorg("Failed to delete task");
+      toast.error("Failed to delete task");
     }
   };
 
