@@ -31,25 +31,56 @@ export default function useTasks() {
   };
 
   const addTask = async (data) => {
-    await createTask(token, data);
+    const toastId = toast.loading("Creating task...");
 
-    await fetchTasks();
+    try {
+      await createTask(token, data);
+
+      await fetchTasks();
+
+      toast.success("Task created successfully", { id: toastId });
+    } catch (error) {
+      toast.error("failed to create task", { id: toastId });
+      throw error;
+    }
   };
 
   const editTask = async (id, data) => {
-    await updateTask(token, id, data);
+    const toastId = toast.loading("Updating task...");
 
-    await fetchTasks();
+    try {
+      await updateTask(token, id, data);
+
+      await fetchTasks();
+
+      toast.success("Task updated successfully", { id: toastId });
+    } catch (error) {
+      toast.error(error.response?.data?.message ?? "Something went wrong", {
+        id: toastId,
+      });
+      throw error;
+    }
   };
 
   const removeTask = async (id) => {
-    await deleteTask(token, id);
+    const toastId = toast.loading("Deleting task...");
 
-    await fetchTasks();
+    try {
+      await deleteTask(token, id);
+
+      await fetchTasks();
+
+      toast.success("Task deleted successfully", { id: toastId });
+    } catch (error) {
+      toast.error(error.response?.data?.message ?? "Something went wrong", {
+        id: toastId,
+      });
+      throw error;
+    }
   };
 
   const toggleStatus = async (task) => {
-    const toatedId = toast.loading("Updating status...");
+    const toastId = toast.loading("Updating status...");
 
     try {
       const newStatus = task.status === "Pending" ? "Completed" : "Pending";
@@ -57,19 +88,20 @@ export default function useTasks() {
       await toggleTaskStatus(token, task.id, {
         title: task.title,
         description: task.description,
-        status: task.status === "Pending" ? "Completed" : "Pending",
+        status: newStatus,
       });
 
       await fetchTasks();
 
       toast.success(
         newStatus === "Completed" ? "Task completed" : "Task moved to pending",
-        { id: toatedId },
+        { id: toastId },
       );
     } catch (error) {
       toast.error(error.response?.data?.message ?? "Something went wrong", {
-        id: toatedId,
+        id: toastId,
       });
+      throw error;
     }
   };
 
