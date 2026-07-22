@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import {
   getTasks,
@@ -48,13 +49,28 @@ export default function useTasks() {
   };
 
   const toggleStatus = async (task) => {
-    await toggleTaskStatus(token, task.id, {
-      title: task.title,
-      description: task.description,
-      status: task.status === "Pending" ? "Completed" : "Pending",
-    });
+    const toatedId = toast.loading("Updating status...");
 
-    await fetchTasks();
+    try {
+      const newStatus = task.status === "Pending" ? "Completed" : "Pending";
+
+      await toggleTaskStatus(token, task.id, {
+        title: task.title,
+        description: task.description,
+        status: task.status === "Pending" ? "Completed" : "Pending",
+      });
+
+      await fetchTasks();
+
+      toast.success(
+        newStatus === "Completed" ? "Task completed" : "Task moved to pending",
+        { id: toatedId },
+      );
+    } catch (error) {
+      toast.error(error.response?.data?.message ?? "Something went wrong", {
+        id: toatedId,
+      });
+    }
   };
 
   useEffect(() => {
