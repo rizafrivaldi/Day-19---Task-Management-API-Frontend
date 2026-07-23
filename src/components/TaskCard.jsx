@@ -1,11 +1,15 @@
+import { useState } from "react";
 import {
   isOverDue,
   getDaysLeft,
   priorityColor,
   statusColor,
 } from "../utils/taskUtils";
+import DeleteTaskDialog from "../components/dialogs/DeleteTaskDialog";
 
 function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
   return (
     <div className="bg-white p-5 rounded-xl shadow">
       <div className="flex justify-between items-start">
@@ -85,11 +89,20 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
         <button
           type="button"
           className="bg-gray-100 hover:bg-red-400 px-4 py-2 rounded"
-          onClick={() => handleDelete(task.id)}
+          onClick={() => setDeleteDialogOpen(true)}
         >
           Delete
         </button>
       </div>
+
+      <DeleteTaskDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={() => {
+          handleDelete(task.id);
+          setDeleteDialogOpen(false);
+        }}
+      />
     </div>
   );
 }
