@@ -1,6 +1,15 @@
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 
-export default function DeleteTaskDialog({ open, onOpenChange, onConfirm }) {
+export default function DeleteTaskDialog({
+  open,
+  onOpenChange,
+  onConfirm,
+
+  title = "Delete Task",
+  description = "Are you sure you want to delete this task?",
+  confirmText = "Delete",
+  cancelText = "Cancel",
+}) {
   return (
     <AlertDialog.Root open={open} onOpenChange={onOpenChange}>
       <AlertDialog.Portal>
@@ -19,16 +28,14 @@ export default function DeleteTaskDialog({ open, onOpenChange, onConfirm }) {
             bg-white
             p-6
             shadow-xl
-        "
+          "
         >
           <AlertDialog.Title className="text-xl font-bold">
-            Delete Task
+            {title}
           </AlertDialog.Title>
 
           <AlertDialog.Description className="mt-2 text-gray-600">
-            Are you sure you want to delete this task?
-            <br />
-            This action cannot be undone.
+            {description}
           </AlertDialog.Description>
 
           <div className="mt-6 flex justify-end gap-3">
@@ -39,9 +46,9 @@ export default function DeleteTaskDialog({ open, onOpenChange, onConfirm }) {
                 px-4
                 py-2
                 hover:bg-gray-100
-            "
+              "
             >
-              Cancel
+              {cancelText}
             </AlertDialog.Cancel>
 
             <AlertDialog.Action
@@ -53,9 +60,9 @@ export default function DeleteTaskDialog({ open, onOpenChange, onConfirm }) {
                 py-2
                 text-white
                 hover:bg-red-600
-            "
+              "
             >
-              Delete
+              {confirmText}
             </AlertDialog.Action>
           </div>
         </AlertDialog.Content>

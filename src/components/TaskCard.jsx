@@ -98,10 +98,11 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
       <DeleteTaskDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        onConfirm={() => {
-          handleDelete(task.id);
-          setDeleteDialogOpen(false);
-        }}
+        title="Delete Task"
+        description={`Are you sure you want to delete "${task.title}"?`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={() => handleDelete(task.id)}
       />
     </div>
   );
