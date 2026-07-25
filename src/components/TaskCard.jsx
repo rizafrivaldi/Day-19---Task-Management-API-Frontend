@@ -10,13 +10,25 @@ import DeleteTaskDialog from "../components/dialogs/DeleteTaskDialog";
 function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
+  const createdDate = new Date(task.createdAt).toLocaleString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const isCompleted = task.status === "Completed";
+
+  const daysLeft = task.dueDate ? getDaysLeft(task.dueDate) : null;
+
   return (
     <div className="bg-white p-5 rounded-xl shadow">
       <div className="flex justify-between items-start">
         <div className="flex-1">
           <h2
             className={`text-xl font-semibold ${
-              task.status === "Completed" ? "line-through text-gray-400" : ""
+              task.status === "Completed" ? "text-gray-400" : ""
             }`}
           >
             {task.title}
@@ -27,13 +39,21 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
 
         <input
           type="checkbox"
-          checked={task.status === "Completed"}
+          checked={isCompleted}
           onChange={(e) => {
             e.stopPropagation();
             toggleStatus(task);
           }}
-          className="w-6 h-6 mt-1 cursor-pointer"
+          className="
+        w-5
+        h-5
+        cursor-pointer"
         />
+        <h2
+          className={`text-xl font-semibold ${
+            isCompleted ? " text-gray-400" : ""
+          }`}
+        ></h2>
       </div>
 
       <div className="mt-2">
@@ -59,21 +79,10 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
           {task.priority.toUpperCase()}
         </span>
 
-        <p className="text-sm text-gray-500 mt-2">
-          Created:{" "}
-          {new Date(task.createdAt).toLocaleString("id-ID", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </p>
+        <p className="text-sm text-gray-500 mt-2">Created: {createdDate}</p>
 
         {task.dueDate && (
-          <p className="text-sm text-gray-500 mt-1">
-            {getDaysLeft(task.dueDate)} days left
-          </p>
+          <p className="text-sm text-gray-500 mt-1">{daysLeft} days left</p>
         )}
       </div>
 
