@@ -28,7 +28,7 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
         <div className="flex-1">
           <h2
             className={`text-xl font-semibold ${
-              task.status === "Completed" ? "text-gray-400" : ""
+              isCompleted ? "text-gray-400" : ""
             }`}
           >
             {task.title}
@@ -49,11 +49,6 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
         h-5
         cursor-pointer"
         />
-        <h2
-          className={`text-xl font-semibold ${
-            isCompleted ? " text-gray-400" : ""
-          }`}
-        ></h2>
       </div>
 
       <div className="mt-2">
