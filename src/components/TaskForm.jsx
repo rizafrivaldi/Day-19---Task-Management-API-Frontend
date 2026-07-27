@@ -1,9 +1,12 @@
+import { Loader2 } from "lucide-react";
+
 function TaskForm({
   formData,
   editingId,
   handleChange,
   handleSubmit,
   resetForm,
+  submitting,
 }) {
   return (
     <form
@@ -58,9 +61,29 @@ function TaskForm({
 
       <button
         type="submit"
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+        disabled={submitting}
+        className="
+        flex items-center justify-center
+        bg-blue-500
+        hover:bg-blue-600
+        text-white
+        px-4
+        py-2
+        rounded
+        disabled:bg-gray-400
+        disabled:cursor-not-allowed
+    "
       >
-        {editingId ? "Update" : "Create"}
+        {submitting ? (
+          <>
+            <Loader2 className="animate-spin mr-2" />
+            Saving...
+          </>
+        ) : editingId ? (
+          "Update"
+        ) : (
+          "Create"
+        )}
       </button>
 
       {editingId && (
