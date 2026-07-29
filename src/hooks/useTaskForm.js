@@ -41,12 +41,9 @@ export default function useTaskForm({ addTask, editTask, removeTask }) {
     });
   };
 
-  const [submitting, setSubmitting] = useState(false);
-
   // Create / update task
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitting(true);
 
     try {
       if (editingId) {
@@ -58,26 +55,20 @@ export default function useTaskForm({ addTask, editTask, removeTask }) {
       resetForm();
     } catch (error) {
       console.log(error);
-    } finally {
-      setSubmitting(false);
     }
   };
 
   const handleDelete = async (id) => {
-    setSubmitting(true);
     try {
       await removeTask(id);
     } catch (error) {
       console.log(error);
-    } finally {
-      setSubmitting(false);
     }
   };
 
   return {
     formData,
     editingId,
-    submitting,
     setEditingId,
     setFormData,
     handleChange,
