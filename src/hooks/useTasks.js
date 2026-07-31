@@ -12,6 +12,7 @@ import {
 export default function useTasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
@@ -33,6 +34,8 @@ export default function useTasks() {
   const addTask = async (data) => {
     const toastId = toast.loading("Creating task...");
 
+    setSubmitting(true);
+
     try {
       await createTask(token, data);
 
@@ -42,11 +45,15 @@ export default function useTasks() {
     } catch (error) {
       toast.error("failed to create task", { id: toastId });
       throw error;
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const editTask = async (id, data) => {
     const toastId = toast.loading("Updating task...");
+
+    setSubmitting(true);
 
     try {
       await updateTask(token, id, data);
@@ -59,11 +66,14 @@ export default function useTasks() {
         id: toastId,
       });
       throw error;
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const removeTask = async (id) => {
     const toastId = toast.loading("Deleting task...");
+    setSubmitting(true);
 
     try {
       await deleteTask(token, id);
@@ -76,11 +86,14 @@ export default function useTasks() {
         id: toastId,
       });
       throw error;
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const toggleStatus = async (task) => {
     const toastId = toast.loading("Updating status...");
+    setSubmitting(true);
 
     try {
       const newStatus = task.status === "Pending" ? "Completed" : "Pending";
@@ -102,6 +115,8 @@ export default function useTasks() {
         id: toastId,
       });
       throw error;
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -114,6 +129,7 @@ export default function useTasks() {
   return {
     tasks,
     loading,
+    submitting,
     error,
     addTask,
     editTask,

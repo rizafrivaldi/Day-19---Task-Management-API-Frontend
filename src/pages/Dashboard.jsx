@@ -19,12 +19,12 @@ import EmptyState from "../components/EmptyState";
 function Dashboard() {
   const { user, logout } = useAuth();
 
-  const { tasks, addTask, editTask, removeTask, toggleStatus } = useTasks();
+  const { tasks, submitting, addTask, editTask, removeTask, toggleStatus } =
+    useTasks();
 
   const {
     formData,
     editingId,
-    submitting,
     handleChange,
     handleSubmit,
     handleEdit,

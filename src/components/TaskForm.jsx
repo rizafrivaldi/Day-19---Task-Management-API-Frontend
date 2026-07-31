@@ -59,10 +59,11 @@ function TaskForm({
         <option value="high">High Priority</option>
       </select>
 
-      <button
-        type="submit"
-        disabled={submitting}
-        className="
+      <div className="flex gap-2 mt-4">
+        <button
+          type="submit"
+          disabled={submitting}
+          className="
         flex items-center justify-center
         bg-blue-500
         hover:bg-blue-600
@@ -73,28 +74,29 @@ function TaskForm({
         disabled:bg-gray-400
         disabled:cursor-not-allowed
     "
-      >
-        {submitting ? (
-          <>
-            <Loader2 className="animate-spin mr-2" />
-            Saving...
-          </>
-        ) : editingId ? (
-          "Update"
-        ) : (
-          "Create"
-        )}
-      </button>
-
-      {editingId && (
-        <button
-          type="button"
-          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded ml-2"
-          onClick={resetForm}
         >
-          Cancel
+          {submitting ? (
+            <>
+              <Loader2 className="animate-spin mr-2" size={16} />
+              Saving...
+            </>
+          ) : editingId ? (
+            "Update"
+          ) : (
+            "Create"
+          )}
         </button>
-      )}
+
+        {editingId && (
+          <button
+            type="button"
+            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded ml-2"
+            onClick={resetForm}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }
