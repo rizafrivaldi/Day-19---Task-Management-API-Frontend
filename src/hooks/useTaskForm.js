@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { validationTask } from "../utils/taskValidation";
 
 export default function useTaskForm({ addTask, editTask, removeTask }) {
   const [editingId, setEditingId] = useState(null);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -11,14 +13,23 @@ export default function useTaskForm({ addTask, editTask, removeTask }) {
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
   const resetForm = () => {
     setEditingId(null);
+
+    setErrors({});
 
     setFormData({
       title: "",
@@ -41,11 +52,21 @@ export default function useTaskForm({ addTask, editTask, removeTask }) {
     });
   };
 
+  const [errors, setErrors] = useState({});
+
   // Create / update task
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      const validationErrors = validationTask(formData);
+
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
+      setErrors({});
+
       if (editingId) {
         await editTask(editingId, formData);
       } else {
@@ -69,6 +90,7 @@ export default function useTaskForm({ addTask, editTask, removeTask }) {
   return {
     formData,
     editingId,
+    errors,
     setEditingId,
     setFormData,
     handleChange,
