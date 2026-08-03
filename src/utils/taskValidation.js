@@ -1,4 +1,4 @@
-export function validateTask(formData) {
+export default function validationTask(formData) {
   const errors = {};
 
   if (!formData.title.trim()) {

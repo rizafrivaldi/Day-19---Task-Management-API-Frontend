@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { validationTask } from "../utils/taskValidation";
+import validationTask from "../utils/taskValidation";
 
 export default function useTaskForm({ addTask, editTask, removeTask }) {
   const [editingId, setEditingId] = useState(null);
