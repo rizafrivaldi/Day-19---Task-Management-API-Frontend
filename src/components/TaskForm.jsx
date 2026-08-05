@@ -3,6 +3,7 @@ import { Loader2 } from "lucide-react";
 function TaskForm({
   formData,
   editingId,
+  errors,
   handleChange,
   handleSubmit,
   resetForm,
@@ -14,20 +15,32 @@ function TaskForm({
       className="bg-white p-6 rounded-xl shadow mb-8"
     >
       <input
-        className="w-full bg-gray-100 p-3 rounded mb-4"
+        className={`w-full p-3 rounded ${
+          errors.title ? "border border-red-500 bg-red-50" : "bg-gray-100"
+        }`}
         name="title"
         placeholder="Task Title"
         value={formData.title}
         onChange={handleChange}
       />
 
+      {errors.title && (
+        <p className="mt-1 mb-3 text-sm text-red-500">{errors.title}</p>
+      )}
+
       <textarea
-        className="w-full bg-gray-100 p-3 rounded mb-4"
+        className={`w-full p-3 rounded ${
+          errors.description ? "border border-red-500 bg-red-50" : "bg-gray-100"
+        }`}
         name="description"
-        placeholder="Description"
+        placeholder="Task Description"
         value={formData.description}
         onChange={handleChange}
       />
+
+      {errors.description && (
+        <p className="mt-1 mb-3 text-sm text-red-500">{errors.description}</p>
+      )}
 
       <select
         name="status"
@@ -45,8 +58,14 @@ function TaskForm({
         name="dueDate"
         value={formData.dueDate}
         onChange={handleChange}
-        className="w-full bg-gray-100 p-3 rounded mb-4"
+        className={`w-full p-3 rounded ${
+          errors.dueDate ? "border border-red-500 bg-red-50" : "bg-gray-100"
+        }`}
       />
+
+      {errors.dueDate && (
+        <p className="mt-1 mb-3 text-sm text-red-500">{errors.dueDate}</p>
+      )}
 
       <select
         name="priority"

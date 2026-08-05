@@ -25,6 +25,7 @@ function Dashboard() {
   const {
     formData,
     editingId,
+    errors,
     handleChange,
     handleSubmit,
     handleEdit,
@@ -59,6 +60,7 @@ function Dashboard() {
       <TaskForm
         formData={formData}
         editingId={editingId}
+        errors={errors}
         submitting={submitting}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
