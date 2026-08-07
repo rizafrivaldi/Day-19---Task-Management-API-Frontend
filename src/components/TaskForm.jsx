@@ -14,38 +14,43 @@ function TaskForm({
       onSubmit={handleSubmit}
       className="bg-white p-6 rounded-xl shadow mb-8"
     >
-      <input
-        className={`w-full p-3 rounded ${
-          errors.title ? "border border-red-500 bg-red-50" : "bg-gray-100"
-        }`}
-        name="title"
-        placeholder="Task Title"
-        value={formData.title}
-        onChange={handleChange}
-      />
+      <div className="mb-4">
+        <input
+          className={`w-full p-3 rounded ${
+            errors.title ? "border border-red-500 bg-red-50" : "bg-gray-100"
+          }`}
+          name="title"
+          placeholder="Task Title"
+          value={formData.title}
+          onChange={handleChange}
+        />
 
-      {errors.title && (
-        <p className="mt-1 mb-3 text-sm text-red-500">{errors.title}</p>
-      )}
+        {errors.title && (
+          <p className="mt-1 text-sm text-red-500">{errors.title}</p>
+        )}
+      </div>
 
-      <textarea
-        className={`w-full p-3 rounded ${
-          errors.description ? "border border-red-500 bg-red-50" : "bg-gray-100"
-        }`}
-        name="description"
-        placeholder="Task Description"
-        value={formData.description}
-        onChange={handleChange}
-      />
+      <div className="mb-4">
+        <textarea
+          className={`w-full p-3 rounded ${
+            errors.description
+              ? "border border-red-500 bg-red-50"
+              : "bg-gray-100"
+          }`}
+          name="description"
+          placeholder="Task Description"
+          value={formData.description}
+          onChange={handleChange}
+        />
 
-      {errors.description && (
-        <p className="mt-1 mb-3 text-sm text-red-500">{errors.description}</p>
-      )}
+        {errors.description && (
+          <p className="mt-1 text-sm text-red-500">{errors.description}</p>
+        )}
+      </div>
 
       <select
         name="status"
         value={formData.status}
-        placeholder="Status"
         onChange={handleChange}
         className="w-full bg-gray-100 p-3 rounded mb-4"
       >
@@ -58,7 +63,7 @@ function TaskForm({
         name="dueDate"
         value={formData.dueDate}
         onChange={handleChange}
-        className={`w-full p-3 rounded ${
+        className={`w-full p-3 rounded mb-4 ${
           errors.dueDate ? "border border-red-500 bg-red-50" : "bg-gray-100"
         }`}
       />
