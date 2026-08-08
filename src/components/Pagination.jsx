@@ -18,7 +18,7 @@ function Pagination({ currentPage, totalPages, setCurrentPage }) {
           className={`px-4 py-2 rounded ${
             currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
           }`}
-        >bro
+        >
           {index + 1}
         </button>
       ))}
