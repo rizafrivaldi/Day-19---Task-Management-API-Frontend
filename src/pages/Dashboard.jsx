@@ -81,7 +81,9 @@ function Dashboard() {
         completedTasks={completedTasks}
       />
       {/* Empty State */}
-      {filteredTasks.length === 0 && <EmptyState />}
+      {filteredTasks.length === 0 && (
+        <EmptyState type={tasks.length === 0 ? "empty" : "no-results"} />
+      )}
 
       {/* Task Card */}
       <div className="grid gap-4">
