@@ -15,13 +15,11 @@ export default function useTasks() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  const token = localStorage.getItem("token");
-
   const fetchTasks = async () => {
     try {
       setLoading(true);
 
-      const data = await getTasks(token);
+      const data = await getTasks();
 
       setTasks(data);
     } catch (error) {
@@ -37,13 +35,13 @@ export default function useTasks() {
     setSubmitting(true);
 
     try {
-      await createTask(token, data);
+      await createTask(data);
 
       await fetchTasks();
 
       toast.success("Task created successfully", { id: toastId });
     } catch (error) {
-      toast.error("failed to create task", { id: toastId });
+      toast.error("Failed to create task", { id: toastId });
       throw error;
     } finally {
       setSubmitting(false);
@@ -56,7 +54,7 @@ export default function useTasks() {
     setSubmitting(true);
 
     try {
-      await updateTask(token, id, data);
+      await updateTask(id, data);
 
       await fetchTasks();
 
@@ -76,7 +74,7 @@ export default function useTasks() {
     setSubmitting(true);
 
     try {
-      await deleteTask(token, id);
+      await deleteTask(id);
 
       await fetchTasks();
 
@@ -98,7 +96,7 @@ export default function useTasks() {
     try {
       const newStatus = task.status === "Pending" ? "Completed" : "Pending";
 
-      await toggleTaskStatus(token, task.id, {
+      await toggleTaskStatus(task.id, {
         title: task.title,
         description: task.description,
         status: newStatus,
@@ -121,9 +119,7 @@ export default function useTasks() {
   };
 
   useEffect(() => {
-    if (token) {
-      fetchTasks();
-    }
+    fetchTasks();
   }, []);
 
   return {
