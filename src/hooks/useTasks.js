@@ -17,6 +17,7 @@ export default function useTasks() {
   const fetchTasks = async () => {
     try {
       setLoading(true);
+      setError(null);
 
       const data = await getTasks();
 
