@@ -6,7 +6,6 @@ import {
   createTask,
   updateTask,
   deleteTask,
-  toggleTaskStatus,
 } from "../services/taskServices";
 
 export default function useTasks() {
@@ -96,7 +95,7 @@ export default function useTasks() {
     try {
       const newStatus = task.status === "Pending" ? "Completed" : "Pending";
 
-      await toggleTaskStatus(task.id, {
+      await updateTask(task.id, {
         title: task.title,
         description: task.description,
         status: newStatus,
