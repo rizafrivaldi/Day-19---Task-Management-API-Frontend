@@ -40,6 +40,7 @@ export default function useTasks() {
 
     try {
       await action();
+      await fetchTasks();
       toast.success(successMessage, { id: toastId });
     } catch (error) {
       toast.error(errorMessage, { id: toastId });
