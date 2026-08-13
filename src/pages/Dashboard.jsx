@@ -19,8 +19,15 @@ import EmptyState from "../components/EmptyState";
 function Dashboard() {
   const { user, logout } = useAuth();
 
-  const { tasks, submitting, addTask, editTask, removeTask, toggleStatus } =
-    useTasks();
+  const {
+    tasks,
+    loading,
+    submitting,
+    addTask,
+    editTask,
+    removeTask,
+    toggleStatus,
+  } = useTasks();
 
   const {
     formData,
@@ -81,29 +88,35 @@ function Dashboard() {
         completedTasks={completedTasks}
       />
       {/* Empty State */}
-      {filteredTasks.length === 0 && (
-        <EmptyState type={tasks.length === 0 ? "empty" : "no-results"} />
-      )}
+      {loading ? (
+        <div className="py-10 text-center text-gray-500">Loading tasks...</div>
+      ) : (
+        <>
+          {filteredTasks.length === 0 && (
+            <EmptyState type={tasks.length === 0 ? "empty" : "no-results"} />
+          )}
 
-      {/* Task Card */}
-      <div className="grid gap-4">
-        {currentTasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-            toggleStatus={toggleStatus}
+          {/* Task Card */}
+          <div className="grid gap-4">
+            {currentTasks.map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+                toggleStatus={toggleStatus}
+              />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
           />
-        ))}
-      </div>
-
-      {/* Pagination */}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        setCurrentPage={setCurrentPage}
-      />
+        </>
+      )}
     </div>
   );
 }
