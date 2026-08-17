@@ -44,10 +44,12 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
             e.stopPropagation();
             toggleStatus(task);
           }}
-          className="
-        w-5
-        h-5
-        cursor-pointer"
+          aria-label={
+            isCompleted
+              ? `Mark "${task.title}" as pending`
+              : `Mark "${task.title}" as completed`
+          }
+          className="w-5 h-5 cursor-pointer"
         />
       </div>
 
@@ -84,7 +86,16 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
       <div className="mt-4 flex gap-2">
         <button
           type="button"
-          className="bg-gray-100 hover:bg-yellow-300 px-4 py-2 rounded"
+          className="
+    rounded-lg
+    bg-gray-100
+    px-4
+    py-2
+    text-sm
+    font-medium
+    hover:bg-yellow-100
+    transition
+  "
           onClick={() => handleEdit(task)}
         >
           Edit
@@ -92,7 +103,16 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
 
         <button
           type="button"
-          className="bg-gray-100 hover:bg-red-400 px-4 py-2 rounded"
+          className="
+    rounded-lg
+    bg-gray-100
+    px-4
+    py-2
+    text-sm
+    font-medium
+    hover:bg-red-100
+    transition
+  "
           onClick={() => setDeleteDialogOpen(true)}
         >
           Delete
