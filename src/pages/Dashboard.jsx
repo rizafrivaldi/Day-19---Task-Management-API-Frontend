@@ -22,6 +22,7 @@ function Dashboard() {
   const {
     tasks,
     loading,
+    error,
     submitting,
     addTask,
     editTask,
@@ -90,13 +91,28 @@ function Dashboard() {
       {/* Empty State */}
       {loading ? (
         <div className="py-10 text-center text-gray-500">Loading tasks...</div>
+      ) : error ? (
+        <div className="rounded-xl bg-red-50 p-6 text-center">
+          <p className="font-medium text-red-600">Failed to load tasks.</p>
+
+          <p className="mt-1 text-sm text-red-500">
+            Something went wrong while loading your tasks.
+          </p>
+
+          <button
+            type="button"
+            onClick={fetchTasks}
+            className="mt-4 rounded-lg bg-red-500 px-4 py-2 text-sm text-white hover:bg-red-600"
+          >
+            Try Again
+          </button>
+        </div>
       ) : (
         <>
           {filteredTasks.length === 0 && (
             <EmptyState type={tasks.length === 0 ? "empty" : "no-results"} />
           )}
 
-          {/* Task Card */}
           <div className="grid gap-4">
             {currentTasks.map((task) => (
               <TaskCard
@@ -109,7 +125,6 @@ function Dashboard() {
             ))}
           </div>
 
-          {/* Pagination */}
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

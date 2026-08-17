@@ -23,7 +23,7 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
   const daysLeft = task.dueDate ? getDaysLeft(task.dueDate) : null;
 
   return (
-    <div className="bg-white p-5 rounded-xl shadow">
+    <div className="rounded-xl bg-white p-5 shadow-sm transition hover:shadow-md">
       <div className="flex justify-between items-start">
         <div className="flex-1">
           <h2
@@ -79,7 +79,15 @@ function TaskCard({ task, handleEdit, handleDelete, toggleStatus }) {
         <p className="text-sm text-gray-500 mt-2">Created: {createdDate}</p>
 
         {task.dueDate && (
-          <p className="text-sm text-gray-500 mt-1">{daysLeft} days left</p>
+          <p
+            className={`mt-1 text-sm ${
+              isOverDue(task) ? "text-red-500" : "text-gray-500"
+            }`}
+          >
+            {isOverDue(task)
+              ? `${Math.abs(daysLeft)} days overdue`
+              : `${daysLeft} days left`}
+          </p>
         )}
       </div>
 
