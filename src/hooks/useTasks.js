@@ -11,7 +11,7 @@ import {
 export default function useTasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchTasks = async () => {
@@ -30,13 +30,15 @@ export default function useTasks() {
   };
 
   const executeTaskAction = async ({
+    type,
     loadingMessage,
     successMessage,
     errorMessage,
     action,
   }) => {
     const toastId = toast.loading(loadingMessage);
-    setSubmitting(true);
+
+    setActionLoading(true);
 
     try {
       await action();
@@ -47,12 +49,13 @@ export default function useTasks() {
       toast.error(errorMessage, { id: toastId });
       throw error;
     } finally {
-      setSubmitting(false);
+      setActionLoading(null);
     }
   };
 
   const addTask = async (data) => {
     await executeTaskAction({
+      type: "creating",
       loadingMessage: "Creating task...",
       successMessage: "Task created successfully",
       errorMessage: "Failed to create task",
@@ -62,6 +65,7 @@ export default function useTasks() {
 
   const editTask = async (id, data) => {
     await executeTaskAction({
+      type: "updating",
       loadingMessage: "Updating task...",
       successMessage: "Task updated successfully",
       errorMessage: "Failed to update task",
@@ -71,6 +75,7 @@ export default function useTasks() {
 
   const removeTask = async (id) => {
     await executeTaskAction({
+      type: "deleting",
       loadingMessage: "Deleting task...",
       successMessage: "Task deleted successfully",
       errorMessage: "Failed to delete task",
@@ -80,7 +85,9 @@ export default function useTasks() {
 
   const toggleStatus = async (task) => {
     const newStatus = task.status === "Pending" ? "Completed" : "Pending";
+
     await executeTaskAction({
+      type: "toggling",
       loadingMessage: "Updating status...",
       successMessage:
         task.status === "Pending" ? "Task completed" : "Task moved to pending",
@@ -102,7 +109,7 @@ export default function useTasks() {
   return {
     tasks,
     loading,
-    submitting,
+    actionLoading,
     error,
     addTask,
     editTask,
