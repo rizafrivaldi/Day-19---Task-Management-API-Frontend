@@ -23,7 +23,7 @@ function Dashboard() {
     tasks,
     loading,
     error,
-    submitting,
+    actionLoading,
     addTask,
     editTask,
     removeTask,
@@ -69,7 +69,9 @@ function Dashboard() {
         formData={formData}
         editingId={editingId}
         errors={errors}
-        submitting={submitting}
+        submitting={
+          actionLoading === "creating" || actionLoading === "updating"
+        }
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         resetForm={resetForm}
